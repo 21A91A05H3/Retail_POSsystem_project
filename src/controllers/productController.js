@@ -103,6 +103,6 @@ export const deleteProduct = async (req, res) => {
       success: false,
       message: error.message,
     });
-
+// product module completed
   }
 };
