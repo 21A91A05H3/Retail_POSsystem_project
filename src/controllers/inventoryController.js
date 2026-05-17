@@ -69,6 +69,6 @@ export const decreaseStock = async (req, res) => {
       success: false,
       message: error.message,
     });
-
+// inventory module completed
   }
 };
