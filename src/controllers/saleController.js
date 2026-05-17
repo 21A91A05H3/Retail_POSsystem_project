@@ -49,6 +49,6 @@ export const getSales = async (req, res) => {
       success: false,
       message: error.message,
     });
-
+// sales module completed
   }
 };
