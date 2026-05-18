@@ -86,5 +86,6 @@ export const deleteSupplier = async (req, res) => {
       success: false,
       message: error.message,
     });
+    // supplier module completed
   }
 };
