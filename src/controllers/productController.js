@@ -1,11 +1,11 @@
+import productModel from "../models/productModel.js";
+
 import {
   addProductService,
   getProductsService,
   updateProductService,
   deleteProductService,
 } from "../services/productService.js";
-
-
 
 // ADD PRODUCT
 export const addProduct = async (req, res) => {
@@ -30,8 +30,6 @@ export const addProduct = async (req, res) => {
   }
 };
 
-
-
 // GET PRODUCTS
 export const getProducts = async (req, res) => {
 
@@ -54,8 +52,6 @@ export const getProducts = async (req, res) => {
 
   }
 };
-
-
 
 // UPDATE PRODUCT
 export const updateProduct = async (req, res) => {
@@ -83,8 +79,6 @@ export const updateProduct = async (req, res) => {
   }
 };
 
-
-
 // DELETE PRODUCT
 export const deleteProduct = async (req, res) => {
 
@@ -103,6 +97,31 @@ export const deleteProduct = async (req, res) => {
       success: false,
       message: error.message,
     });
-// product module completed
+
+  }
+};
+
+// LOW STOCK PRODUCTS
+export const getLowStockProducts = async (req, res) => {
+
+  try {
+
+    const lowStockProducts = await productModel.find({
+      stock: { $lt: 5 },
+    });
+
+    res.status(200).json({
+      success: true,
+      count: lowStockProducts.length,
+      products: lowStockProducts,
+    });
+
+  } catch (error) {
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+
   }
 };

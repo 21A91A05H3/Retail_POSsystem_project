@@ -5,25 +5,24 @@ import {
   getProducts,
   updateProduct,
   deleteProduct,
+  getLowStockProducts,
 } from "../controllers/productController.js";
 
 const router = express.Router();
 
+// LOW STOCK PRODUCTS
+router.get("/low-stock", getLowStockProducts);
 
 // ADD PRODUCT
-router.post("/add", addProduct);
+router.post("/", addProduct);
 
-
-// GET PRODUCTS
+// GET ALL PRODUCTS
 router.get("/", getProducts);
 
-
 // UPDATE PRODUCT
-router.put("/update/:id", updateProduct);
-
+router.put("/:id", updateProduct);
 
 // DELETE PRODUCT
-router.delete("/delete/:id", deleteProduct);
-
+router.delete("/:id", deleteProduct);
 
 export default router;
