@@ -124,4 +124,4 @@ export const getLowStockProducts = async (req, res) => {
     });
 
   }
-};
+};// low stock feature completed
