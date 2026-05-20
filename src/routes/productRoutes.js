@@ -5,19 +5,33 @@ import {
   getProducts,
   updateProduct,
   deleteProduct,
+  searchProducts,
   getLowStockProducts,
+  getPaginatedProducts,
 } from "../controllers/productController.js";
 
 const router = express.Router();
 
-// LOW STOCK PRODUCTS
-router.get("/low-stock", getLowStockProducts);
-
 // ADD PRODUCT
 router.post("/", addProduct);
 
-// GET ALL PRODUCTS
+// GET PRODUCTS
 router.get("/", getProducts);
+
+// SEARCH PRODUCTS
+router.get("/search", searchProducts);
+
+// LOW STOCK PRODUCTS
+router.get(
+  "/low-stock",
+  getLowStockProducts
+);
+
+// PAGINATED PRODUCTS
+router.get(
+  "/paginated",
+  getPaginatedProducts
+);
 
 // UPDATE PRODUCT
 router.put("/:id", updateProduct);
