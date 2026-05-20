@@ -38,5 +38,5 @@ router.put("/:id", updateProduct);
 
 // DELETE PRODUCT
 router.delete("/:id", deleteProduct);
-
+// pagination feature completed
 export default router;
