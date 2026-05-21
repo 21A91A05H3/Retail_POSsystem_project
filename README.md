@@ -1,3 +1,4 @@
+
 # Retail Point of Scale (POS) and Inventory Management System
 A full-stack Omnical POS application
 
@@ -15,4 +16,7 @@ GitHub Profile: https://github.com/Lavanyaprasad08
 
 Pasupuleti Naveena Lasya
 GitHub Profile: https://github.com/21A91A05H3
+
+
+# Retail_POSsystem_project
 
