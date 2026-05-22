@@ -1,9 +1,9 @@
-# grocery-delivery-app
-A full-stack grocery delivery application
+# Retail Point of Scale (POS) and Inventory Management System
+A full-stack Omnical POS application
 
-Grocery Delivery Application
 
-This is a full-stack grocery delivery application built using the MERN stack (MongoDB, Express.js, React.js, Node.js).
+
+This is a full-stack POS application built using the MERN stack (MongoDB, Express.js, React.js, Node.js).
 
 Team Members
 
@@ -18,6 +18,3 @@ GitHub Profile: https://github.com/Lavanyaprasad08
 Pasupuleti Naveena Lasya
 GitHub Profile: https://github.com/21A91A05H3
 
-
-Gundlapalli Jathin
-GitHub Profile: https://github.com/jathi333
