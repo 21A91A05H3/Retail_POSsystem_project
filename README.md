@@ -1,22 +1,16 @@
-
 # Retail Point of Scale (POS) and Inventory Management System
-A full-stack Omnical POS application
+
+A full-stack Omnical POS application.
 
 This is a full-stack Retail POS application built using the MERN stack (MongoDB, Express.js, React.js, Node.js).
 
-Team Members
+## Team Members
 
-Sourabh Barwahe
+### Sourabh Barwahe
 GitHub Profile: https://github.com/Sourabh-Barwahe
 
-
-P.Lavanya
+### P. Lavanya
 GitHub Profile: https://github.com/Lavanyaprasad08
 
-
-Pasupuleti Naveena Lasya
+### Pasupuleti Naveena Lasya
 GitHub Profile: https://github.com/21A91A05H3
-
-
-# Retail_POSsystem_project
-
