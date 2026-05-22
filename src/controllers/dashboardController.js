@@ -1,40 +1,108 @@
-import Product from "../models/productModel.js";
-import Sale from "../models/saleModel.js";
-import Category from "../models/categoryModel.js";
-import Supplier from "../models/supplierModel.js";
+import productModel from "../models/productModel.js";
+import orderModel from "../models/orderModel.js";
 
-export const getDashboardData = async (req, res) => {
+// DASHBOARD STATS
+export const getDashboardStats = async (
+  req,
+  res
+) => {
+
   try {
-    const totalProducts = await Product.countDocuments();
 
-    const totalSales = await Sale.countDocuments();
+    // total products
+    const totalProducts =
+      await productModel.countDocuments();
 
-    const totalCategories = await Category.countDocuments();
+    // total orders
+    const totalOrders =
+      await orderModel.countDocuments();
 
-    const totalSuppliers = await Supplier.countDocuments();
+    // fetch orders
+    const orders =
+      await orderModel.find();
 
-    const salesData = await Sale.find();
-
-    const totalRevenue = salesData.reduce(
-      (acc, item) => acc + item.totalAmount,
+    // total revenue
+    const totalRevenue = orders.reduce(
+      (acc, item) =>
+        acc + item.totalAmount,
       0
     );
 
+    // low stock
+    const lowStockProducts =
+      await productModel.find({
+        stock: { $lt: 10 },
+      });
+
+    // monthly revenue
+    const monthlyRevenue = {};
+
+    orders.forEach((order) => {
+
+      const month =
+        new Date(
+          order.createdAt
+        ).toLocaleString(
+          "default",
+          { month: "long" }
+        );
+
+      if (!monthlyRevenue[month]) {
+        monthlyRevenue[month] = 0;
+      }
+
+      monthlyRevenue[month] +=
+        order.totalAmount;
+
+    });
+
+    // top selling products
+    const productSales = {};
+
+    orders.forEach((order) => {
+
+      order.products.forEach(
+        (item) => {
+
+          if (
+            !productSales[
+              item.productName
+            ]
+          ) {
+            productSales[
+              item.productName
+            ] = 0;
+          }
+
+          productSales[
+            item.productName
+          ] += item.quantity;
+
+        }
+      );
+
+    });
+
     res.status(200).json({
       success: true,
-      dashboard: {
-        totalProducts,
-        totalSales,
-        totalCategories,
-        totalSuppliers,
-        totalRevenue,
-      },
+      totalProducts,
+      totalOrders,
+      totalRevenue,
+      lowStockCount:
+        lowStockProducts.length,
+      lowStockProducts,
+      monthlyRevenue,
+      topSellingProducts:
+        productSales,
     });
+
   } catch (error) {
+
     res.status(500).json({
       success: false,
       message: error.message,
     });
+
   }
-// dashboard analytics completed
+
 };
