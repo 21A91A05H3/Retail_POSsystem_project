@@ -3,62 +3,53 @@ import express from "express";
 import {
   addProduct,
   getProducts,
+  getSingleProduct,
   updateProduct,
   deleteProduct,
-  searchProducts,
-  getLowStockProducts,
-  getPaginatedProducts,
 } from "../controllers/productController.js";
 
-import {
-  protect,
-  adminOnly,
-} from "../middleware/authMiddleware.js";
+import upload from "../middleware/uploadMiddleware.js";
 
 const router = express.Router();
 
-// ADD PRODUCT
+// ==============================
+// ADD PRODUCT WITH IMAGE
+// ==============================
 router.post(
   "/",
-  protect,
-  adminOnly,
+  upload.single("image"),
   addProduct
 );
 
-// GET PRODUCTS
-router.get("/", getProducts);
-
-// SEARCH PRODUCTS
+// ==============================
+// GET ALL PRODUCTS
+// ==============================
 router.get(
-  "/search",
-  searchProducts
+  "/",
+  getProducts
 );
 
-// LOW STOCK PRODUCTS
+// ==============================
+// GET SINGLE PRODUCT
+// ==============================
 router.get(
-  "/low-stock",
-  getLowStockProducts
+  "/:id",
+  getSingleProduct
 );
 
-// PAGINATED PRODUCTS
-router.get(
-  "/paginated",
-  getPaginatedProducts
-);
-
+// ==============================
 // UPDATE PRODUCT
+// ==============================
 router.put(
   "/:id",
-  protect,
-  adminOnly,
   updateProduct
 );
 
+// ==============================
 // DELETE PRODUCT
+// ==============================
 router.delete(
   "/:id",
-  protect,
-  adminOnly,
   deleteProduct
 );
 
