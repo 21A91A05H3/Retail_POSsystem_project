@@ -1,9 +1,24 @@
 import React from "react";
+import "./Dashboard.css";
+
+import Sidebar from "../../components/Sidebar/sidebar";
 
 function Dashboard() {
+
   return (
-    <div>
-      <h1>Dashboard Page</h1>
+
+    <div className="dashboard">
+
+      <Sidebar />
+
+      <div className="dashboard-content">
+
+        <h1>
+          Dashboard
+        </h1>
+
+      </div>
+
     </div>
   );
 }
