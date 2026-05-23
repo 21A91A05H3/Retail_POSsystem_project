@@ -1,9 +1,46 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Login.css";
 import { Link } from "react-router-dom";
 
 function Login() {
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [errors, setErrors] = useState({});
+
+  const handleLogin = (e) => {
+
+    e.preventDefault();
+
+    let validationErrors = {};
+
+    if(email === ""){
+      validationErrors.email =
+        "Email is required";
+    }
+
+    if(password === ""){
+      validationErrors.password =
+        "Password is required";
+    }
+    else if(password.length < 6){
+      validationErrors.password =
+        "Password must be at least 6 characters";
+    }
+
+    setErrors(validationErrors);
+
+    if(
+      Object.keys(validationErrors).length === 0
+    ){
+      alert("Login Successful");
+    }
+
+  };
+
   return (
+
     <div className="login-container">
 
       <div className="login-box">
@@ -12,26 +49,50 @@ function Login() {
           Retail POS Login
         </h2>
 
-        <form>
+        <form onSubmit={handleLogin}>
 
           <div className="mb-3">
+
             <label>Email</label>
 
             <input
               type="email"
               className="form-control"
               placeholder="Enter email"
+
+              value={email}
+
+              onChange={(e) =>
+                setEmail(e.target.value)
+              }
             />
+
+            <small className="text-danger">
+              {errors.email}
+            </small>
+
           </div>
 
           <div className="mb-3">
+
             <label>Password</label>
 
             <input
               type="password"
               className="form-control"
               placeholder="Enter password"
+
+              value={password}
+
+              onChange={(e) =>
+                setPassword(e.target.value)
+              }
             />
+
+            <small className="text-danger">
+              {errors.password}
+            </small>
+
           </div>
 
           <button className="btn btn-primary w-100">
@@ -41,8 +102,13 @@ function Login() {
         </form>
 
         <p className="text-center mt-3">
+
           Don't have an account?
-          <Link to="/signup"> Sign Up</Link>
+
+          <Link to="/signup">
+            {" "}Sign Up
+          </Link>
+
         </p>
 
       </div>
