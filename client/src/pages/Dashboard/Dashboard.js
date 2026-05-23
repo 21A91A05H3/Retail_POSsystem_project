@@ -2,6 +2,7 @@ import React from "react";
 import "./Dashboard.css";
 
 import Sidebar from "../../components/Sidebar/sidebar";
+import Navbar from "../../components/Navbar/navbar";
 
 function Dashboard() {
 
@@ -12,6 +13,8 @@ function Dashboard() {
       <Sidebar />
 
       <div className="dashboard-content">
+
+        <Navbar />
 
         <h1>
           Dashboard
