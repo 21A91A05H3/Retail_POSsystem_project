@@ -1,5 +1,7 @@
-import "./Login.css";
 import React from "react";
+import "./Login.css";
+import { Link } from "react-router-dom";
+
 function Login() {
   return (
     <div className="login-container">
@@ -37,6 +39,11 @@ function Login() {
           </button>
 
         </form>
+
+        <p className="text-center mt-3">
+          Don't have an account?
+          <Link to="/signup"> Sign Up</Link>
+        </p>
 
       </div>
 

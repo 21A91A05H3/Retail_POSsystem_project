@@ -1,6 +1,6 @@
 import React from "react";
 import "./signup.css";
-
+import { Link } from "react-router-dom";
 function Signup() {
   return (
     <div className="signup-container">
@@ -56,6 +56,10 @@ function Signup() {
           <button className="btn btn-success w-100">
             Sign Up
           </button>
+          <p className="text-center mt-3">
+  Already have an account?
+  <Link to="/"> Login</Link>
+</p>
 
         </form>
 
