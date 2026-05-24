@@ -3,6 +3,7 @@ import "./pos.css";
 
 import Sidebar from "../../components/Sidebar/sidebar";
 import Navbar from "../../components/Navbar/navbar";
+import Invoice from "../../components/Invoice/invoice";
 
 function POS() {
 
@@ -112,7 +113,7 @@ function POS() {
 
         <div className="pos-container">
 
-          {/* Products */}
+          {/* Products Section */}
 
           <div className="products-section">
 
@@ -156,7 +157,7 @@ function POS() {
 
           </div>
 
-          {/* Cart */}
+          {/* Cart Section */}
 
           <div className="cart-section">
 
@@ -231,6 +232,19 @@ function POS() {
           </div>
 
         </div>
+
+        {/* Invoice Section */}
+
+        {
+          cart.length > 0 && (
+
+            <Invoice
+              cart={cart}
+              totalAmount={totalAmount}
+            />
+
+          )
+        }
 
       </div>
 
