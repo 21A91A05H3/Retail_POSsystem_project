@@ -16,8 +16,10 @@
 
     position: fixed;
 
-    left: 0;
     top: 0;
+    left: 0;
+
+    overflow-y: auto;
 }
 
 .logo{
@@ -36,6 +38,17 @@
     list-style: none;
 
     padding: 0;
+
+    margin: 0;
+}
+
+.sidebar-menu a{
+
+    text-decoration: none;
+
+    color: white;
+
+    display: block;
 }
 
 .sidebar-menu li{
@@ -53,11 +66,22 @@
     align-items: center;
 
     transition: 0.3s;
+
+    font-size: 18px;
 }
 
 .sidebar-menu li:hover{
 
-    background-color: rgba(255,255,255,0.2);
+    background-color:
+    rgba(255,255,255,0.2);
+
+    transform: translateX(5px);
+}
+
+.sidebar-menu .active li{
+
+    background-color:
+    rgba(255,255,255,0.2);
 
     transform: translateX(5px);
 }
@@ -73,5 +97,6 @@
 
     margin-top: 50px;
 
-    background-color: rgba(255,255,255,0.1);
+    background-color:
+    rgba(255,255,255,0.1);
 }
