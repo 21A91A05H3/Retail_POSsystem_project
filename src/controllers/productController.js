@@ -174,3 +174,71 @@ export const deleteProduct = async (req, res) => {
   }
 
 };
+
+// ======================================
+// LOW STOCK PRODUCTS
+// ======================================
+
+export const getLowStockProducts = async (req, res) => {
+
+  try {
+
+    const lowStockProducts = await productModel.find({
+      stock: { $lte: 5, $gt: 0 }
+    });
+
+    const productsWithWarnings = lowStockProducts.map((product) => ({
+      ...product._doc,
+      warning: "Low Stock",
+    }));
+
+    res.status(200).json({
+      success: true,
+      count: productsWithWarnings.length,
+      products: productsWithWarnings,
+    });
+
+  } catch (error) {
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+
+  }
+
+};
+
+// ======================================
+// OUT OF STOCK PRODUCTS
+// ======================================
+
+export const getOutOfStockProducts = async (req, res) => {
+
+  try {
+
+    const outOfStockProducts = await productModel.find({
+      stock: 0
+    });
+
+    const productsWithWarnings = outOfStockProducts.map((product) => ({
+      ...product._doc,
+      warning: "Out Of Stock",
+    }));
+
+    res.status(200).json({
+      success: true,
+      count: productsWithWarnings.length,
+      products: productsWithWarnings,
+    });
+
+  } catch (error) {
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+
+  }
+
+};
