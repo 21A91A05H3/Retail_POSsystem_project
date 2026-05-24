@@ -11,6 +11,7 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import Signup from "./SignUp/signup";
 import POS from "./pages/POS/pos";
 import Products from "./pages/Products/products";
+import Inventory from "./pages/Inventory/inventory";
 
 function App() {
   return (
@@ -40,6 +41,11 @@ function App() {
          <Route
   path="/products"
   element={<Products />}
+         
+/>
+<Route
+  path="/inventory"
+  element={<Inventory />}
 />
       </Routes>
 
