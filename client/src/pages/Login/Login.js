@@ -1,13 +1,28 @@
 import React, { useState } from "react";
+
 import "./Login.css";
-import { Link } from "react-router-dom";
+
+import {
+  Link,
+  useNavigate
+} from "react-router-dom";
+
+import { toast }
+from "react-toastify";
 
 function Login() {
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const navigate =
+    useNavigate();
 
-  const [errors, setErrors] = useState({});
+  const [email, setEmail] =
+    useState("");
+
+  const [password, setPassword] =
+    useState("");
+
+  const [errors, setErrors] =
+    useState({});
 
   const handleLogin = (e) => {
 
@@ -16,15 +31,18 @@ function Login() {
     let validationErrors = {};
 
     if(email === ""){
+
       validationErrors.email =
         "Email is required";
     }
 
     if(password === ""){
+
       validationErrors.password =
         "Password is required";
     }
     else if(password.length < 6){
+
       validationErrors.password =
         "Password must be at least 6 characters";
     }
@@ -34,9 +52,38 @@ function Login() {
     if(
       Object.keys(validationErrors).length === 0
     ){
-      alert("Login Successful");
-    }
 
+      const storedUser = JSON.parse(
+
+        localStorage.getItem("user")
+      );
+
+      if(
+
+        storedUser &&
+        storedUser.email === email &&
+        storedUser.password === password
+      ){
+
+        localStorage.setItem(
+
+          "isLoggedIn",
+          true
+        );
+
+        toast.success(
+          "Login Successful"
+        );
+
+        navigate("/dashboard");
+      }
+      else{
+
+        toast.error(
+          "Invalid Email or Password"
+        );
+      }
+    }
   };
 
   return (
@@ -46,57 +93,89 @@ function Login() {
       <div className="login-box">
 
         <h2 className="text-center text-primary mb-4">
+
           Retail POS Login
+
         </h2>
 
         <form onSubmit={handleLogin}>
 
           <div className="mb-3">
 
-            <label>Email</label>
+            <label>
+              Email
+            </label>
 
             <input
               type="email"
+
               className="form-control"
+
               placeholder="Enter email"
 
               value={email}
 
-              onChange={(e) =>
-                setEmail(e.target.value)
-              }
+              onChange={(e) => {
+
+                setEmail(e.target.value);
+
+                setErrors({
+
+                  ...errors,
+
+                  email: ""
+                });
+              }}
             />
 
             <small className="text-danger">
+
               {errors.email}
+
             </small>
 
           </div>
 
           <div className="mb-3">
 
-            <label>Password</label>
+            <label>
+              Password
+            </label>
 
             <input
               type="password"
+
               className="form-control"
+
               placeholder="Enter password"
 
               value={password}
 
-              onChange={(e) =>
-                setPassword(e.target.value)
-              }
+              onChange={(e) => {
+
+                setPassword(e.target.value);
+
+                setErrors({
+
+                  ...errors,
+
+                  password: ""
+                });
+              }}
             />
 
             <small className="text-danger">
+
               {errors.password}
+
             </small>
 
           </div>
 
           <button className="btn btn-primary w-100">
+
             Login
+
           </button>
 
         </form>
@@ -106,7 +185,8 @@ function Login() {
           Don't have an account?
 
           <Link to="/signup">
-            {" "}Sign Up
+            {" "}
+            Sign Up
           </Link>
 
         </p>
