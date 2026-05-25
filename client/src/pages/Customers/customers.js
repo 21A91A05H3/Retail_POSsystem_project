@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import "./customers.css";
 
 import Sidebar from "../../components/Sidebar/sidebar";
 import Navbar from "../../components/Navbar/navbar";
 
 function Customers() {
+
+  const [search, setSearch] =
+    useState("");
 
   const customers = [
 
@@ -42,6 +45,16 @@ function Customers() {
 
   ];
 
+  const filteredCustomers =
+    customers.filter((customer) =>
+
+      customer.name
+        .toLowerCase()
+        .includes(
+          search.toLowerCase()
+        )
+    );
+
   return (
 
     <div className="customers-page">
@@ -55,6 +68,25 @@ function Customers() {
         <h2 className="mb-4">
           Customers Management
         </h2>
+
+        {/* Search Input */}
+
+        <input
+
+          type="text"
+
+          placeholder="Search Customer"
+
+          className="form-control search-input"
+
+          value={search}
+
+          onChange={(e) =>
+            setSearch(e.target.value)
+          }
+        />
+
+        {/* Customers Table */}
 
         <div className="customers-table">
 
@@ -81,7 +113,7 @@ function Customers() {
             <tbody>
 
               {
-                customers.map((customer) => (
+                filteredCustomers.map((customer) => (
 
                   <tr key={customer.id}>
 

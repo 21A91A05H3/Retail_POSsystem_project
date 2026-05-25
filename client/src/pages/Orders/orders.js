@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import "./orders.css";
 
 import Sidebar from "../../components/Sidebar/sidebar";
 import Navbar from "../../components/Navbar/navbar";
 
 function Orders() {
+
+  const [search, setSearch] =
+    useState("");
+
+  const [paymentFilter, setPaymentFilter] =
+    useState("All");
 
   const orders = [
 
@@ -42,6 +48,27 @@ function Orders() {
 
   ];
 
+  const filteredOrders =
+    orders.filter((order) => {
+
+      const matchesSearch =
+        order.customer
+          .toLowerCase()
+          .includes(
+            search.toLowerCase()
+          );
+
+      const matchesPayment =
+        paymentFilter === "All"
+        ||
+        order.payment === paymentFilter;
+
+      return (
+        matchesSearch &&
+        matchesPayment
+      );
+    });
+
   return (
 
     <div className="orders-page">
@@ -55,6 +82,56 @@ function Orders() {
         <h2 className="mb-4">
           Orders Management
         </h2>
+
+        {/* Search and Filter */}
+
+        <div className="orders-filters">
+
+          <input
+
+            type="text"
+
+            placeholder="Search Customer"
+
+            className="form-control search-input"
+
+            value={search}
+
+            onChange={(e) =>
+              setSearch(e.target.value)
+            }
+          />
+
+          <select
+
+            className="form-select filter-select"
+
+            value={paymentFilter}
+
+            onChange={(e) =>
+              setPaymentFilter(
+                e.target.value
+              )
+            }
+          >
+
+            <option value="All">
+              All Payments
+            </option>
+
+            <option value="Paid">
+              Paid
+            </option>
+
+            <option value="Pending">
+              Pending
+            </option>
+
+          </select>
+
+        </div>
+
+        {/* Orders Table */}
 
         <div className="orders-table">
 
@@ -81,7 +158,7 @@ function Orders() {
             <tbody>
 
               {
-                orders.map((order) => (
+                filteredOrders.map((order) => (
 
                   <tr key={order.id}>
 
