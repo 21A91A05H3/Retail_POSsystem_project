@@ -5,7 +5,6 @@ This is a full-stack Retail POS application built using the MERN stack (MongoDB,
 
 Team Members
 
-Sourabh Barwahe GitHub Profile: https://github.com/Sourabh-Barwahe
 
 P.Lavanya GitHub Profile: https://github.com/Lavanyaprasad08
 
