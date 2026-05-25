@@ -4,6 +4,7 @@ import "./products.css";
 import Sidebar from "../../components/Sidebar/sidebar";
 import Navbar from "../../components/Navbar/navbar";
 
+
 function Products() {
 
   const [productName, setProductName] =
@@ -14,6 +15,9 @@ function Products() {
 
   const [products, setProducts] =
     useState([]);
+
+  const [search, setSearch] =
+  useState("");
 
   const addProduct = (e) => {
 
@@ -54,7 +58,15 @@ function Products() {
 
     setProducts(updatedProducts);
   };
+       const filteredProducts =
+  products.filter((product) =>
 
+    product.name
+    .toLowerCase()
+    .includes(
+      search.toLowerCase()
+    )
+  );
   return (
 
     <div className="products-page">
@@ -114,7 +126,20 @@ function Products() {
         </form>
 
         {/* Product Table */}
+          <input
 
+  type="text"
+
+  placeholder="Search Product"
+
+  className="form-control search-input"
+
+  value={search}
+
+  onChange={(e) =>
+    setSearch(e.target.value)
+  }
+/>
         <div className="table-container">
 
           <table className="table table-hover">
@@ -138,7 +163,7 @@ function Products() {
             <tbody>
 
               {
-                products.map((product) => (
+              filteredProducts.map((product) => (
 
                   <tr key={product.id}>
 
