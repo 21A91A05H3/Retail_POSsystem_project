@@ -1,9 +1,12 @@
 import React, { useState } from "react";
+
 import "./products.css";
 
-import Sidebar from "../../components/Sidebar/sidebar";
-import Navbar from "../../components/Navbar/navbar";
+import Sidebar
+from "../../components/Sidebar/sidebar";
 
+import Navbar
+from "../../components/Navbar/navbar";
 
 function Products() {
 
@@ -17,7 +20,16 @@ function Products() {
     useState([]);
 
   const [search, setSearch] =
-  useState("");
+    useState("");
+
+  const [editId, setEditId] =
+    useState(null);
+
+  const [editName, setEditName] =
+    useState("");
+
+  const [editPrice, setEditPrice] =
+    useState("");
 
   const addProduct = (e) => {
 
@@ -40,33 +52,80 @@ function Products() {
     };
 
     setProducts([
+
       ...products,
+
       newProduct
     ]);
 
     setProductName("");
+
     setPrice("");
   };
 
   const deleteProduct = (id) => {
 
     const updatedProducts =
+
       products.filter(
+
         (product) =>
+
           product.id !== id
       );
 
     setProducts(updatedProducts);
   };
-       const filteredProducts =
-  products.filter((product) =>
 
-    product.name
-    .toLowerCase()
-    .includes(
-      search.toLowerCase()
-    )
-  );
+  const editProduct = (product) => {
+
+    setEditId(product.id);
+
+    setEditName(product.name);
+
+    setEditPrice(product.price);
+  };
+
+  const updateProduct = () => {
+
+    const updatedProducts =
+
+      products.map((product) =>
+
+        product.id === editId
+        ?
+        {
+          ...product,
+
+          name: editName,
+
+          price: editPrice
+        }
+        :
+        product
+      );
+
+    setProducts(updatedProducts);
+
+    setEditId(null);
+
+    setEditName("");
+
+    setEditPrice("");
+  };
+
+  const filteredProducts =
+
+    products.filter((product) =>
+
+      product.name
+      .toLowerCase()
+      .includes(
+
+        search.toLowerCase()
+      )
+    );
+
   return (
 
     <div className="products-page">
@@ -78,7 +137,9 @@ function Products() {
         <Navbar />
 
         <h2 className="mb-4">
+
           Product Management
+
         </h2>
 
         {/* Product Form */}
@@ -99,7 +160,9 @@ function Products() {
             value={productName}
 
             onChange={(e) =>
-              setProductName(e.target.value)
+              setProductName(
+                e.target.value
+              )
             }
           />
 
@@ -113,7 +176,9 @@ function Products() {
             value={price}
 
             onChange={(e) =>
-              setPrice(e.target.value)
+              setPrice(
+                e.target.value
+              )
             }
           />
 
@@ -125,21 +190,26 @@ function Products() {
 
         </form>
 
+        {/* Search */}
+
+        <input
+          type="text"
+
+          placeholder="Search Product"
+
+          className="form-control search-input"
+
+          value={search}
+
+          onChange={(e) =>
+            setSearch(
+              e.target.value
+            )
+          }
+        />
+
         {/* Product Table */}
-          <input
 
-  type="text"
-
-  placeholder="Search Product"
-
-  className="form-control search-input"
-
-  value={search}
-
-  onChange={(e) =>
-    setSearch(e.target.value)
-  }
-/>
         <div className="table-container">
 
           <table className="table table-hover">
@@ -163,7 +233,7 @@ function Products() {
             <tbody>
 
               {
-              filteredProducts.map((product) => (
+                filteredProducts.map((product) => (
 
                   <tr key={product.id}>
 
@@ -172,14 +242,80 @@ function Products() {
                     </td>
 
                     <td>
-                      {product.name}
+
+                      {
+                        editId === product.id
+                        ?
+                        <input
+                          type="text"
+
+                          className="form-control"
+
+                          value={editName}
+
+                          onChange={(e) =>
+                            setEditName(
+                              e.target.value
+                            )
+                          }
+                        />
+                        :
+                        product.name
+                      }
+
                     </td>
 
                     <td>
-                      ₹{product.price}
+
+                      {
+                        editId === product.id
+                        ?
+                        <input
+                          type="number"
+
+                          className="form-control"
+
+                          value={editPrice}
+
+                          onChange={(e) =>
+                            setEditPrice(
+                              e.target.value
+                            )
+                          }
+                        />
+                        :
+                        `₹${product.price}`
+                      }
+
                     </td>
 
                     <td>
+
+                      {
+                        editId === product.id
+                        ?
+                        <button
+                          className="btn btn-success btn-sm me-2"
+
+                          onClick={updateProduct}
+                        >
+
+                          Save
+
+                        </button>
+                        :
+                        <button
+                          className="btn btn-warning btn-sm me-2"
+
+                          onClick={() =>
+                            editProduct(product)
+                          }
+                        >
+
+                          Edit
+
+                        </button>
+                      }
 
                       <button
                         className="btn btn-danger btn-sm"
@@ -188,7 +324,9 @@ function Products() {
                           deleteProduct(product.id)
                         }
                       >
+
                         Delete
+
                       </button>
 
                     </td>
