@@ -1,9 +1,16 @@
 import React, { useState } from "react";
+
 import "./signup.css";
 
-import { Link } from "react-router-dom";
+import {
 
-import { toast } from "react-toastify";
+  Link,
+  Navigate
+
+} from "react-router-dom";
+
+import { toast }
+from "react-toastify";
 
 function Signup() {
 
@@ -21,6 +28,16 @@ function Signup() {
 
   const [errors, setErrors] =
     useState({});
+
+  const isLoggedIn =
+    localStorage.getItem(
+      "isLoggedIn"
+    );
+
+  if(isLoggedIn){
+
+    return <Navigate to="/dashboard" />;
+  }
 
   const handleSignup = (e) => {
 

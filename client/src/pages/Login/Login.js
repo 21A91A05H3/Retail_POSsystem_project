@@ -3,8 +3,11 @@ import React, { useState } from "react";
 import "./Login.css";
 
 import {
+
   Link,
-  useNavigate
+  useNavigate,
+  Navigate
+
 } from "react-router-dom";
 
 import { toast }
@@ -23,6 +26,16 @@ function Login() {
 
   const [errors, setErrors] =
     useState({});
+
+  const isLoggedIn =
+    localStorage.getItem(
+      "isLoggedIn"
+    );
+
+  if(isLoggedIn){
+
+    return <Navigate to="/dashboard" />;
+  }
 
   const handleLogin = (e) => {
 
