@@ -6,7 +6,8 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
-
+import ProtectedRoute
+from "./components/ProtectedRoute/protectedroute";
 import Login from "./pages/Login/Login";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Signup from "./SignUp/signup";
@@ -28,9 +29,16 @@ function App() {
         />
 
         <Route
-          path="/dashboard"
-          element={<Dashboard />}
-        />
+  path="/dashboard"
+
+  element={
+    <ProtectedRoute>
+
+      <Dashboard />
+
+    </ProtectedRoute>
+  }
+/>
 
         <Route
           path="/signup"
@@ -39,24 +47,25 @@ function App() {
 
       <Route
   path="/pos"
-  element={<POS />}
+  element={
+  <ProtectedRoute><POS /></ProtectedRoute>}
 />
          <Route
   path="/products"
-  element={<Products />}
+  element={<ProtectedRoute><Products /></ProtectedRoute>}
          
 />
 <Route
   path="/inventory"
-  element={<Inventory />}
+  element={<ProtectedRoute><Inventory /></ProtectedRoute>}
 />
        <Route
   path="/orders"
-  element={<Orders />}
+  element={<ProtectedRoute><Orders /></ProtectedRoute>}
 />
           <Route
   path="/customers"
-  element={<Customers />}
+  element={<ProtectedRoute><Customers /></ProtectedRoute>}
 />
       </Routes>
         <ToastContainer />
