@@ -1,7 +1,9 @@
 import React from "react";
+
 import "./sidebar.css";
 
 import {
+
   FaTachometerAlt,
   FaCashRegister,
   FaBoxOpen,
@@ -9,23 +11,49 @@ import {
   FaShoppingCart,
   FaUsers,
   FaSignOutAlt
+
 } from "react-icons/fa";
 
 import {
+
   Link,
-  useLocation
+  useLocation,
+  useNavigate
+
 } from "react-router-dom";
+
+import { toast }
+from "react-toastify";
 
 function Sidebar() {
 
-  const location = useLocation();
+  const location =
+    useLocation();
+
+  const navigate =
+    useNavigate();
+
+  const handleLogout = () => {
+
+    localStorage.removeItem(
+      "isLoggedIn"
+    );
+
+    toast.success(
+      "Logout Successful"
+    );
+
+    navigate("/");
+  };
 
   return (
 
     <div className="sidebar">
 
       <h2 className="logo">
+
         Retail POS
+
       </h2>
 
       <ul className="sidebar-menu">
@@ -41,6 +69,7 @@ function Sidebar() {
             ""
           }
         >
+
           <li>
 
             <FaTachometerAlt className="icon" />
@@ -48,6 +77,7 @@ function Sidebar() {
             Dashboard
 
           </li>
+
         </Link>
 
         <Link
@@ -61,6 +91,7 @@ function Sidebar() {
             ""
           }
         >
+
           <li>
 
             <FaCashRegister className="icon" />
@@ -68,6 +99,7 @@ function Sidebar() {
             POS
 
           </li>
+
         </Link>
 
         <Link
@@ -81,6 +113,7 @@ function Sidebar() {
             ""
           }
         >
+
           <li>
 
             <FaBoxOpen className="icon" />
@@ -88,6 +121,7 @@ function Sidebar() {
             Products
 
           </li>
+
         </Link>
 
         <Link
@@ -101,6 +135,7 @@ function Sidebar() {
             ""
           }
         >
+
           <li>
 
             <FaWarehouse className="icon" />
@@ -108,6 +143,7 @@ function Sidebar() {
             Inventory
 
           </li>
+
         </Link>
 
         <Link
@@ -121,6 +157,7 @@ function Sidebar() {
             ""
           }
         >
+
           <li>
 
             <FaShoppingCart className="icon" />
@@ -128,6 +165,7 @@ function Sidebar() {
             Orders
 
           </li>
+
         </Link>
 
         <Link
@@ -141,6 +179,7 @@ function Sidebar() {
             ""
           }
         >
+
           <li>
 
             <FaUsers className="icon" />
@@ -148,9 +187,14 @@ function Sidebar() {
             Customers
 
           </li>
+
         </Link>
 
-        <li className="logout">
+        <li
+          className="logout"
+
+          onClick={handleLogout}
+        >
 
           <FaSignOutAlt className="icon" />
 

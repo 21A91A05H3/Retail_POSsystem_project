@@ -1,6 +1,9 @@
 import React from "react";
 import "./navbar.css";
 
+
+import { toast }
+from "react-toastify";
 import {
   FaBell,
   FaSearch,
@@ -8,6 +11,7 @@ import {
 } from "react-icons/fa";
 
 function Navbar() {
+  
 
   return (
 
