@@ -2,12 +2,12 @@ import userModel from "../models/userModel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-
+// REGISTER USER
 export const registerUser = async (req, res) => {
 
   try {
 
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
 
     // check existing user
     const existingUser = await userModel.findOne({ email });
@@ -27,6 +27,7 @@ export const registerUser = async (req, res) => {
       name,
       email,
       password: hashedPassword,
+      role: role || "cashier",
     });
 
     res.status(201).json({
@@ -45,8 +46,7 @@ export const registerUser = async (req, res) => {
   }
 };
 
-
-
+// LOGIN USER
 export const loginUser = async (req, res) => {
 
   try {
@@ -64,7 +64,10 @@ export const loginUser = async (req, res) => {
     }
 
     // compare password
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await bcrypt.compare(
+      password,
+      user.password
+    );
 
     if (!isMatch) {
       return res.status(400).json({

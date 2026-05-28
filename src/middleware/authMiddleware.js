@@ -1,28 +1,39 @@
 import jwt from "jsonwebtoken";
 import userModel from "../models/userModel.js";
 
-const authMiddleware = async (req, res, next) => {
+// PROTECT ROUTES
+export const protect = async (req, res, next) => {
 
   try {
 
-    const token = req.headers.authorization;
+    let token = req.headers.authorization;
 
-    if (!token) {
+    if (
+      token &&
+      token.startsWith("Bearer")
+    ) {
+
+      token = token.split(" ")[1];
+
+      const decoded = jwt.verify(
+        token,
+        process.env.JWT_SECRET
+      );
+
+      req.user = await userModel.findById(
+        decoded.id
+      );
+
+      next();
+
+    } else {
+
       return res.status(401).json({
         success: false,
-        message: "No Token Provided",
+        message: "Not Authorized",
       });
+
     }
-
-    // verify token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    // find user
-    const user = await userModel.findById(decoded.id).select("-password");
-
-    req.user = user;
-
-    next();
 
   } catch (error) {
 
@@ -34,4 +45,34 @@ const authMiddleware = async (req, res, next) => {
   }
 };
 
-export default authMiddleware;
+// ADMIN ONLY
+export const adminOnly = async (
+  req,
+  res,
+  next
+) => {
+
+  try {
+
+    if (req.user.role === "admin") {
+
+      next();
+
+    } else {
+
+      return res.status(403).json({
+        success: false,
+        message: "Admin Access Only",
+      });
+
+    }
+
+  } catch (error) {
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+
+  }
+};
