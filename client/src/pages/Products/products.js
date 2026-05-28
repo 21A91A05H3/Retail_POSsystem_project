@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import React, {
+  useState,
+  useEffect
+} from "react";
 
 import "./products.css";
 
@@ -17,7 +20,12 @@ function Products() {
     useState("");
 
   const [products, setProducts] =
-    useState([]);
+    useState(
+
+      JSON.parse(
+        localStorage.getItem("products")
+      ) || []
+    );
 
   const [search, setSearch] =
     useState("");
@@ -30,6 +38,17 @@ function Products() {
 
   const [editPrice, setEditPrice] =
     useState("");
+
+  useEffect(() => {
+
+    localStorage.setItem(
+
+      "products",
+
+      JSON.stringify(products)
+    );
+
+  }, [products]);
 
   const addProduct = (e) => {
 
