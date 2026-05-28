@@ -77,6 +77,35 @@ function Products() {
       newProduct
     ]);
 
+    /* Auto Add To Inventory */
+
+    const existingInventory =
+
+      JSON.parse(
+        localStorage.getItem("inventory")
+      ) || [];
+
+    const newInventoryItem = {
+
+      id: newProduct.id,
+
+      product: productName,
+
+      stock: 0
+    };
+
+    localStorage.setItem(
+
+      "inventory",
+
+      JSON.stringify([
+
+        ...existingInventory,
+
+        newInventoryItem
+      ])
+    );
+
     setProductName("");
 
     setPrice("");
@@ -94,6 +123,29 @@ function Products() {
       );
 
     setProducts(updatedProducts);
+
+    /* Delete From Inventory Also */
+
+    const inventory =
+
+      JSON.parse(
+        localStorage.getItem("inventory")
+      ) || [];
+
+    const updatedInventory =
+
+      inventory.filter(
+
+        (item) =>
+          item.id !== id
+      );
+
+    localStorage.setItem(
+
+      "inventory",
+
+      JSON.stringify(updatedInventory)
+    );
   };
 
   const editProduct = (product) => {
@@ -125,6 +177,36 @@ function Products() {
       );
 
     setProducts(updatedProducts);
+
+    /* Update Inventory Product Name */
+
+    const inventory =
+
+      JSON.parse(
+        localStorage.getItem("inventory")
+      ) || [];
+
+    const updatedInventory =
+
+      inventory.map((item) =>
+
+        item.id === editId
+        ?
+        {
+          ...item,
+
+          product: editName
+        }
+        :
+        item
+      );
+
+    localStorage.setItem(
+
+      "inventory",
+
+      JSON.stringify(updatedInventory)
+    );
 
     setEditId(null);
 
