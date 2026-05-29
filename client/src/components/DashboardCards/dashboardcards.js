@@ -1,42 +1,109 @@
 import React from "react";
+
 import "./dashboardcards.css";
 
 import {
-  FaDollarSign,
+
   FaShoppingCart,
   FaBoxOpen,
+  FaWarehouse,
   FaUsers
+
 } from "react-icons/fa";
 
 function DashboardCards() {
 
+  const products =
+
+    JSON.parse(
+      localStorage.getItem("products")
+    ) || [];
+
+  const inventory =
+
+    JSON.parse(
+      localStorage.getItem("inventory")
+    ) || [];
+
+  const orders = [
+
+    {
+      id: 101
+    },
+
+    {
+      id: 102
+    },
+
+    {
+      id: 103
+    },
+
+    {
+      id: 104
+    }
+
+  ];
+
+  const customers = [
+
+    {
+      id: 1
+    },
+
+    {
+      id: 2
+    },
+
+    {
+      id: 3
+    },
+
+    {
+      id: 4
+    }
+
+  ];
+
   const cards = [
 
     {
-      title: "Total Sales",
-      value: "₹25,000",
-      icon: <FaDollarSign />,
+      title: "Products",
+
+      value: products.length,
+
+      icon: <FaBoxOpen />,
+
+      color: "products"
+    },
+
+    {
+      title: "Inventory",
+
+      value: inventory.length,
+
+      icon: <FaWarehouse />,
+
       color: "sales"
     },
 
     {
       title: "Orders",
-      value: "120",
+
+      value: orders.length,
+
       icon: <FaShoppingCart />,
+
       color: "orders"
     },
 
     {
-      title: "Products",
-      value: "450",
-      icon: <FaBoxOpen />,
-      color: "products"
-    },
-
-    {
       title: "Customers",
-      value: "85",
+
+      value: customers.length,
+
       icon: <FaUsers />,
+
       color: "customers"
     }
 
@@ -51,21 +118,28 @@ function DashboardCards() {
 
           <div
             className={`dashboard-card ${card.color}`}
+
             key={index}
           >
 
             <div className="card-icon">
+
               {card.icon}
+
             </div>
 
             <div>
 
               <h4>
+
                 {card.title}
+
               </h4>
 
               <h2>
+
                 {card.value}
+
               </h2>
 
             </div>
