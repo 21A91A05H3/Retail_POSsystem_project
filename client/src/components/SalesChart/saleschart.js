@@ -1,7 +1,9 @@
 import React from "react";
+
 import "./saleschart.css";
 
 import {
+
   LineChart,
   Line,
   XAxis,
@@ -9,18 +11,42 @@ import {
   Tooltip,
   ResponsiveContainer,
   CartesianGrid
+
 } from "recharts";
 
 function SalesChart() {
 
   const data = [
 
-    { month: "Jan", sales: 4000 },
-    { month: "Feb", sales: 3000 },
-    { month: "Mar", sales: 5000 },
-    { month: "Apr", sales: 4500 },
-    { month: "May", sales: 6000 },
-    { month: "Jun", sales: 7000 }
+    {
+      month: "Jan",
+      sales: 12000
+    },
+
+    {
+      month: "Feb",
+      sales: 18000
+    },
+
+    {
+      month: "Mar",
+      sales: 15000
+    },
+
+    {
+      month: "Apr",
+      sales: 22000
+    },
+
+    {
+      month: "May",
+      sales: 26000
+    },
+
+    {
+      month: "Jun",
+      sales: 30000
+    }
 
   ];
 
@@ -28,20 +54,34 @@ function SalesChart() {
 
     <div className="chart-container">
 
-      <h3>
-        Monthly Sales
-      </h3>
+      <div className="chart-header">
+
+        <h3>
+          Monthly Sales Analytics
+        </h3>
+
+        <p>
+          Retail POS Performance Overview
+        </p>
+
+      </div>
 
       <ResponsiveContainer
         width="100%"
-        height={300}
+        height={350}
       >
 
-        <LineChart data={data}>
+        <LineChart
+          data={data}
+        >
 
-          <CartesianGrid strokeDasharray="3 3" />
+          <CartesianGrid
+            strokeDasharray="3 3"
+          />
 
-          <XAxis dataKey="month" />
+          <XAxis
+            dataKey="month"
+          />
 
           <YAxis />
 
@@ -49,9 +89,16 @@ function SalesChart() {
 
           <Line
             type="monotone"
+
             dataKey="sales"
+
             stroke="#2563eb"
-            strokeWidth={3}
+
+            strokeWidth={4}
+
+            activeDot={{
+              r: 8
+            }}
           />
 
         </LineChart>
