@@ -124,7 +124,7 @@ function Products() {
 
     setProducts(updatedProducts);
 
-    /* Delete From Inventory Also */
+    /* Delete From Inventory */
 
     const inventory =
 
@@ -334,6 +334,25 @@ function Products() {
             <tbody>
 
               {
+                filteredProducts.length === 0
+                ?
+
+                <tr>
+
+                  <td
+                    colSpan="4"
+
+                    className="text-center text-muted"
+                  >
+
+                    No Products Available
+
+                  </td>
+
+                </tr>
+
+                :
+
                 filteredProducts.map((product) => (
 
                   <tr key={product.id}>
