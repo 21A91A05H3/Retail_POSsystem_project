@@ -35,3 +35,19 @@
 
     margin-bottom: 20px;
 }
+
+.table{
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    background: white;
+}
+
+.table th{
+
+    background-color: #2563eb;
+
+    color: white;
+}
