@@ -24,7 +24,13 @@ function DashboardCards() {
     JSON.parse(
       localStorage.getItem("inventory")
     ) || [];
+ 
+    const lowStockItems =
 
+  inventory.filter(
+
+    (item) => item.stock <= 10
+  ).length;
   const orders = [
 
     {
@@ -86,6 +92,16 @@ function DashboardCards() {
 
       color: "sales"
     },
+
+    {
+  title: "Low Stock",
+
+  value: lowStockItems,
+
+  icon: <FaBoxOpen />,
+
+  color: "orders"
+},
 
     {
       title: "Orders",
