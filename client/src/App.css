@@ -36,3 +36,14 @@
     transform: rotate(360deg);
   }
 }
+
+
+.btn{
+
+    transition: 0.3s;
+}
+
+.btn:hover{
+
+    transform: scale(1.05);
+}
