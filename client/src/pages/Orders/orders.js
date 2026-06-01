@@ -1,8 +1,14 @@
-import React, { useState } from "react";
+import React, {
+  useState
+} from "react";
+
 import "./orders.css";
 
-import Sidebar from "../../components/Sidebar/sidebar";
-import Navbar from "../../components/Navbar/navbar";
+import Sidebar
+from "../../components/Sidebar/sidebar";
+
+import Navbar
+from "../../components/Navbar/navbar";
 
 function Orders() {
 
@@ -12,58 +18,33 @@ function Orders() {
   const [paymentFilter, setPaymentFilter] =
     useState("All");
 
-  const orders = [
+  const orders =
 
-    {
-      id: 101,
-      customer: "Rahul",
-      amount: 1200,
-      payment: "Paid",
-      status: "Delivered"
-    },
-
-    {
-      id: 102,
-      customer: "Priya",
-      amount: 800,
-      payment: "Pending",
-      status: "Processing"
-    },
-
-    {
-      id: 103,
-      customer: "Arjun",
-      amount: 1500,
-      payment: "Paid",
-      status: "Delivered"
-    },
-
-    {
-      id: 104,
-      customer: "Sneha",
-      amount: 650,
-      payment: "Pending",
-      status: "Pending"
-    }
-
-  ];
+    JSON.parse(
+      localStorage.getItem("orders")
+    ) || [];
 
   const filteredOrders =
+
     orders.filter((order) => {
 
       const matchesSearch =
+
         order.customer
           .toLowerCase()
           .includes(
+
             search.toLowerCase()
           );
 
       const matchesPayment =
+
         paymentFilter === "All"
         ||
         order.payment === paymentFilter;
 
       return (
+
         matchesSearch &&
         matchesPayment
       );
@@ -80,7 +61,9 @@ function Orders() {
         <Navbar />
 
         <h2 className="mb-4">
+
           Orders Management
+
         </h2>
 
         {/* Search and Filter */}
@@ -98,7 +81,9 @@ function Orders() {
             value={search}
 
             onChange={(e) =>
-              setSearch(e.target.value)
+              setSearch(
+                e.target.value
+              )
             }
           />
 
@@ -116,15 +101,21 @@ function Orders() {
           >
 
             <option value="All">
+
               All Payments
+
             </option>
 
             <option value="Paid">
+
               Paid
+
             </option>
 
             <option value="Pending">
+
               Pending
+
             </option>
 
           </select>
@@ -158,20 +149,45 @@ function Orders() {
             <tbody>
 
               {
+                filteredOrders.length === 0
+                ?
+
+                <tr>
+
+                  <td
+                    colSpan="5"
+
+                    className="text-center text-muted"
+                  >
+
+                    No Orders Available
+
+                  </td>
+
+                </tr>
+
+                :
+
                 filteredOrders.map((order) => (
 
                   <tr key={order.id}>
 
                     <td>
+
                       #{order.id}
+
                     </td>
 
                     <td>
+
                       {order.customer}
+
                     </td>
 
                     <td>
+
                       ₹{order.amount}
+
                     </td>
 
                     <td>

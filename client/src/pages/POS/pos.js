@@ -245,12 +245,53 @@ function POS() {
 
             </h4>
 
-            <button className="btn btn-success w-100 mt-3">
+            <button
+  className="btn btn-success w-100 mt-3"
 
-              Checkout
+  onClick={() => {
 
-            </button>
+    const existingOrders =
 
+      JSON.parse(
+        localStorage.getItem("orders")
+      ) || [];
+
+    const newOrder = {
+
+      id: Date.now(),
+
+      customer: "Walk-in Customer",
+
+      amount: totalAmount,
+
+      payment: "Paid",
+
+      status: "Delivered",
+
+      items: cart
+    };
+
+    localStorage.setItem(
+
+      "orders",
+
+      JSON.stringify([
+
+        ...existingOrders,
+
+        newOrder
+      ])
+    );
+
+    alert("Order Placed Successfully");
+
+    setCart([]);
+  }}
+>
+
+  Checkout
+
+</button>
           </div>
 
         </div>
