@@ -52,7 +52,7 @@ function Sidebar() {
 
       <h2 className="logo">
 
-        Retail POS
+        Admin Retail POS System
 
       </h2>
 
