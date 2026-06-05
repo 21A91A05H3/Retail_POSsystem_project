@@ -1,10 +1,30 @@
+import React from "react";
 
-import './App.css';
+import {
+  BrowserRouter,
+  Routes,
+  Route
+} from "react-router-dom";
+
+import Home
+from "./pages/Home/home";
 
 function App() {
+
   return (
-    
-    <h1>User Frontend</h1>
+
+    <BrowserRouter>
+
+      <Routes>
+
+        <Route
+          path="/"
+          element={<Home />}
+        />
+
+      </Routes>
+
+    </BrowserRouter>
   );
 }
 

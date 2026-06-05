@@ -1,0 +1,36 @@
+.hero-section{
+
+  height: 90vh;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  align-items: center;
+
+  background: linear-gradient(
+    to right,
+    #2563eb,
+    #1e3a8a
+  );
+
+  color: white;
+
+  text-align: center;
+}
+
+.hero-section h1{
+
+  font-size: 60px;
+
+  margin-bottom: 20px;
+}
+
+.hero-section p{
+
+  font-size: 24px;
+
+  margin-bottom: 25px;
+}

@@ -1,0 +1,48 @@
+.custom-navbar{
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  padding: 15px 40px;
+
+  background: #2563eb;
+
+  color: white;
+}
+
+.logo{
+
+  font-size: 28px;
+
+  font-weight: bold;
+}
+
+.nav-links{
+
+  display: flex;
+
+  gap: 25px;
+
+  list-style: none;
+
+  margin: 0;
+}
+
+.nav-links a{
+
+  text-decoration: none;
+
+  color: white;
+
+  font-size: 18px;
+
+  transition: 0.3s;
+}
+
+.nav-links a:hover{
+
+  color: #facc15;
+}
