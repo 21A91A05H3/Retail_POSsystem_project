@@ -34,3 +34,18 @@
 
   margin-bottom: 25px;
 }
+
+.products-section{
+
+  padding: 60px 20px;
+}
+
+.product-card{
+
+  transition: 0.3s;
+}
+
+.product-card:hover{
+
+  transform: translateY(-5px);
+}
