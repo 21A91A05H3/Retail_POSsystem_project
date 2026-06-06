@@ -9,6 +9,9 @@ import {
 import Home
 from "./pages/Home/home";
 
+import Cart
+from "./pages/Cart/cart";
+
 function App() {
 
   return (
@@ -20,6 +23,11 @@ function App() {
         <Route
           path="/"
           element={<Home />}
+        />
+
+        <Route
+          path="/cart"
+          element={<Cart />}
         />
 
       </Routes>
