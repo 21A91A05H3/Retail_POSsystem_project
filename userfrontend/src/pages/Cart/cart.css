@@ -21,3 +21,59 @@
 
   background: white;
 }
+
+
+.success-modal{
+
+  position: fixed;
+
+  top: 0;
+
+  left: 0;
+
+  width: 100%;
+
+  height: 100%;
+
+  background: rgba(0,0,0,0.5);
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  z-index: 999;
+}
+
+.modal-content-custom{
+
+  background: white;
+
+  padding: 40px;
+
+  border-radius: 15px;
+
+  text-align: center;
+
+  width: 350px;
+
+  animation: popup 0.3s ease;
+}
+
+@keyframes popup{
+
+  from{
+
+    transform: scale(0.7);
+
+    opacity: 0;
+  }
+
+  to{
+
+    transform: scale(1);
+
+    opacity: 1;
+  }
+}

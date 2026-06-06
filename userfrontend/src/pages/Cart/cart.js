@@ -13,6 +13,9 @@ function Cart() {
   const [cartItems, setCartItems] =
     useState([]);
 
+  const [showModal, setShowModal] =
+    useState(false);
+
   useEffect(() => {
 
     const storedCart =
@@ -128,6 +131,65 @@ function Cart() {
           ₹{totalAmount}
 
         </h3>
+
+        {
+          cartItems.length > 0 && (
+
+            <button
+              className="btn btn-success mt-3"
+
+              onClick={() => {
+
+                setShowModal(true);
+
+                localStorage.removeItem("cart");
+
+                setCartItems([]);
+              }}
+            >
+
+              Checkout
+
+            </button>
+          )
+        }
+
+        {
+          showModal && (
+
+            <div className="success-modal">
+
+              <div className="modal-content-custom">
+
+                <h2>
+
+                  🎉 Order Successful
+
+                </h2>
+
+                <p>
+
+                  Your order has been placed successfully.
+
+                </p>
+
+                <button
+                  className="btn btn-primary"
+
+                  onClick={() =>
+                    setShowModal(false)
+                  }
+                >
+
+                  OK
+
+                </button>
+
+              </div>
+
+            </div>
+          )
+        }
 
       </div>
 
