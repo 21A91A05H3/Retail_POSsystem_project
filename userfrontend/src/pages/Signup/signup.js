@@ -38,6 +38,16 @@ function Signup() {
       [e.target.name]:
       e.target.value
     });
+
+    // Remove Error While Typing
+
+    setErrors({
+
+      ...errors,
+
+      [e.target.name]: "",
+      general: ""
+    });
   };
 
   const handleSignup = (e) => {
@@ -93,7 +103,7 @@ function Signup() {
     else if(password.length < 6){
 
       validationErrors.password =
-        "Password must be at least 6 characters";
+        "Minimum 6 characters required";
     }
 
     // Confirm Password
@@ -101,7 +111,7 @@ function Signup() {
     if(!confirmPassword){
 
       validationErrors.confirmPassword =
-        "Confirm password is required";
+        "Confirm your password";
     }
     else if(
       password !== confirmPassword
@@ -130,7 +140,7 @@ function Signup() {
 
     setErrors(validationErrors);
 
-    // Stop if validation fails
+    // Stop Validation
 
     if(
       Object.keys(validationErrors)
