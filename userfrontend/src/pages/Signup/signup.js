@@ -26,8 +26,8 @@ function Signup() {
       confirmPassword: ""
     });
 
-  const [error, setError] =
-    useState("");
+  const [errors, setErrors] =
+    useState({});
 
   const handleChange = (e) => {
 
@@ -44,6 +44,8 @@ function Signup() {
 
     e.preventDefault();
 
+    let validationErrors = {};
+
     const {
       name,
       email,
@@ -51,61 +53,62 @@ function Signup() {
       confirmPassword
     } = formData;
 
-    // Empty Fields Validation
+    // Name Validation
 
-    if(
-      !name ||
-      !email ||
-      !password ||
-      !confirmPassword
-    ){
+    if(!name){
 
-      setError(
-        "All fields are required"
-      );
-
-      return;
+      validationErrors.name =
+        "Name is required";
     }
 
     // Email Validation
 
-    const emailPattern =
+    if(!email){
 
-      /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      validationErrors.email =
+        "Email is required";
+    }
+    else{
 
-    if(
-      !emailPattern.test(email)
-    ){
+      const emailPattern =
 
-      setError(
-        "Enter valid email"
-      );
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-      return;
+      if(
+        !emailPattern.test(email)
+      ){
+
+        validationErrors.email =
+          "Enter valid email";
+      }
     }
 
-    // Password Length
+    // Password Validation
 
-    if(password.length < 6){
+    if(!password){
 
-      setError(
-        "Password must be at least 6 characters"
-      );
+      validationErrors.password =
+        "Password is required";
+    }
+    else if(password.length < 6){
 
-      return;
+      validationErrors.password =
+        "Password must be at least 6 characters";
     }
 
     // Confirm Password
 
-    if(
+    if(!confirmPassword){
+
+      validationErrors.confirmPassword =
+        "Confirm password is required";
+    }
+    else if(
       password !== confirmPassword
     ){
 
-      setError(
-        "Passwords do not match"
-      );
-
-      return;
+      validationErrors.confirmPassword =
+        "Passwords do not match";
     }
 
     // Existing User Check
@@ -121,10 +124,18 @@ function Signup() {
       existingUser.email === email
     ){
 
-      setError(
-        "User already exists"
-      );
+      validationErrors.general =
+        "User already exists";
+    }
 
+    setErrors(validationErrors);
+
+    // Stop if validation fails
+
+    if(
+      Object.keys(validationErrors)
+      .length > 0
+    ){
       return;
     }
 
@@ -142,7 +153,15 @@ function Signup() {
       })
     );
 
-    alert("Signup Successful");
+    // Clear Form
+
+    setFormData({
+
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: ""
+    });
 
     navigate("/login");
   };
@@ -168,11 +187,11 @@ function Signup() {
           </h2>
 
           {
-            error && (
+            errors.general && (
 
               <p className="error-text">
 
-                {error}
+                {errors.general}
 
               </p>
             )
@@ -192,6 +211,17 @@ function Signup() {
             onChange={handleChange}
           />
 
+          {
+            errors.name && (
+
+              <p className="error-text">
+
+                {errors.name}
+
+              </p>
+            )
+          }
+
           <input
             type="email"
 
@@ -205,6 +235,17 @@ function Signup() {
 
             onChange={handleChange}
           />
+
+          {
+            errors.email && (
+
+              <p className="error-text">
+
+                {errors.email}
+
+              </p>
+            )
+          }
 
           <input
             type="password"
@@ -220,6 +261,17 @@ function Signup() {
             onChange={handleChange}
           />
 
+          {
+            errors.password && (
+
+              <p className="error-text">
+
+                {errors.password}
+
+              </p>
+            )
+          }
+
           <input
             type="password"
 
@@ -234,6 +286,17 @@ function Signup() {
             onChange={handleChange}
           />
 
+          {
+            errors.confirmPassword && (
+
+              <p className="error-text">
+
+                {errors.confirmPassword}
+
+              </p>
+            )
+          }
+
           <button className="btn btn-primary w-100">
 
             Signup
@@ -243,6 +306,8 @@ function Signup() {
           <p className="text-center">
 
             Already have account?
+
+            {" "}
 
             <Link to="/login">
 

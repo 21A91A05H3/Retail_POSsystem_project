@@ -23,21 +23,39 @@ function Login() {
   const [password, setPassword] =
     useState("");
 
-  const [error, setError] =
-    useState("");
+  const [errors, setErrors] =
+    useState({});
 
   const handleLogin = (e) => {
 
     e.preventDefault();
 
-    // Empty Validation
+    let validationErrors = {};
 
-    if(!email || !password){
+    // Email Validation
 
-      setError(
-        "All fields are required"
-      );
+    if(!email){
 
+      validationErrors.email =
+        "Email is required";
+    }
+
+    // Password Validation
+
+    if(!password){
+
+      validationErrors.password =
+        "Password is required";
+    }
+
+    setErrors(validationErrors);
+
+    // Stop Validation
+
+    if(
+      Object.keys(validationErrors)
+      .length > 0
+    ){
       return;
     }
 
@@ -53,14 +71,16 @@ function Login() {
 
     if(!storedUser){
 
-      setError(
+      setErrors({
+
+        general:
         "No account found. Please signup."
-      );
+      });
 
       return;
     }
 
-    // Credential Match
+    // Login Match
 
     if(
 
@@ -74,15 +94,20 @@ function Login() {
         true
       );
 
-      alert("Login Successful");
+      // Clear Form
+
+      setEmail("");
+      setPassword("");
 
       navigate("/");
     }
     else{
 
-      setError(
+      setErrors({
+
+        general:
         "Invalid email or password"
-      );
+      });
     }
   };
 
@@ -107,11 +132,11 @@ function Login() {
           </h2>
 
           {
-            error && (
+            errors.general && (
 
               <p className="error-text">
 
-                {error}
+                {errors.general}
 
               </p>
             )
@@ -126,10 +151,30 @@ function Login() {
 
             value={email}
 
-            onChange={(e) =>
-              setEmail(e.target.value)
-            }
+            onChange={(e) => {
+
+              setEmail(e.target.value);
+
+              setErrors({
+
+                ...errors,
+
+                email: "",
+                general: ""
+              });
+            }}
           />
+
+          {
+            errors.email && (
+
+              <p className="error-text">
+
+                {errors.email}
+
+              </p>
+            )
+          }
 
           <input
             type="password"
@@ -140,10 +185,30 @@ function Login() {
 
             value={password}
 
-            onChange={(e) =>
-              setPassword(e.target.value)
-            }
+            onChange={(e) => {
+
+              setPassword(e.target.value);
+
+              setErrors({
+
+                ...errors,
+
+                password: "",
+                general: ""
+              });
+            }}
           />
+
+          {
+            errors.password && (
+
+              <p className="error-text">
+
+                {errors.password}
+
+              </p>
+            )
+          }
 
           <button className="btn btn-primary w-100">
 
@@ -154,6 +219,8 @@ function Login() {
           <p className="text-center">
 
             Don't have account?
+
+            {" "}
 
             <Link to="/signup">
 
