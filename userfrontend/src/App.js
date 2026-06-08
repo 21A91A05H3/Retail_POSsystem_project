@@ -11,7 +11,8 @@ from "./pages/Home/home";
 
 import Cart
 from "./pages/Cart/cart";
-
+import Signup
+from "./pages/Signup/signup";
 function App() {
 
   return (
@@ -29,7 +30,10 @@ function App() {
           path="/cart"
           element={<Cart />}
         />
-
+        <Route
+  path="/signup"
+  element={<Signup />}
+/>
       </Routes>
 
     </BrowserRouter>
