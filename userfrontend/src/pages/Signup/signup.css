@@ -27,3 +27,12 @@
 
   background: white;
 }
+
+.error-text{
+
+  color: red;
+
+  text-align: center;
+
+  margin: 0;
+}
