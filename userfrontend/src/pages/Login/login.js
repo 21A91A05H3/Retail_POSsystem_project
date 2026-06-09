@@ -80,7 +80,7 @@ function Login() {
       return;
     }
 
-    // Login Match
+    // Credential Match
 
     if(
 
@@ -89,9 +89,18 @@ function Login() {
 
     ){
 
+      // Login Session
+
       localStorage.setItem(
         "isLoggedIn",
         true
+      );
+
+      // Store Username
+
+      localStorage.setItem(
+        "loggedInUser",
+        storedUser.name
       );
 
       // Clear Form

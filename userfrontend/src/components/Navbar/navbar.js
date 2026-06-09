@@ -3,15 +3,54 @@ import React from "react";
 import "./navbar.css";
 
 import {
-  Link
+  Link,
+  useNavigate
 } from "react-router-dom";
 
 import {
   FaShoppingCart,
-  FaUserCircle
+  FaUserCircle,
+  FaSignOutAlt
 } from "react-icons/fa";
 
 function Navbar() {
+
+  const navigate =
+    useNavigate();
+
+  const isLoggedIn =
+
+    localStorage.getItem(
+      "isLoggedIn"
+    );
+
+  const loggedInUser =
+
+    localStorage.getItem(
+      "loggedInUser"
+    );
+
+  const handleLogout = () => {
+
+    const confirmLogout =
+
+      window.confirm(
+        "Are you sure you want to logout?"
+      );
+
+    if(confirmLogout){
+
+      localStorage.removeItem(
+        "isLoggedIn"
+      );
+
+      localStorage.removeItem(
+        "loggedInUser"
+      );
+
+      navigate("/");
+    }
+  };
 
   return (
 
@@ -26,30 +65,79 @@ function Navbar() {
       <ul className="nav-links">
 
         <li>
+
           <Link to="/">
+
             Home
+
           </Link>
+
         </li>
 
         <li>
+
           <Link to="/cart">
 
             <FaShoppingCart />
 
+            {" "}
+
             Cart
 
           </Link>
+
         </li>
 
-        <li>
-          <Link to="/login">
+        {
+          isLoggedIn
+          ?
 
-            <FaUserCircle />
+          <>
 
-            Login
+            <li className="user-name">
 
-          </Link>
-        </li>
+              Hi,
+              {" "}
+              {loggedInUser}
+
+            </li>
+
+            <li>
+
+              <button
+                className="logout-btn"
+
+                onClick={handleLogout}
+              >
+
+                <FaSignOutAlt />
+
+                {" "}
+
+                Logout
+
+              </button>
+
+            </li>
+
+          </>
+
+          :
+
+          <li>
+
+            <Link to="/login">
+
+              <FaUserCircle />
+
+              {" "}
+
+              Login
+
+            </Link>
+
+          </li>
+        }
 
       </ul>
 
