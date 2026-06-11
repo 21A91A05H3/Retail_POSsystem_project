@@ -73,7 +73,15 @@ function Navbar() {
           </Link>
 
         </li>
+          <li>
 
+  <Link to="/orders">
+
+    Orders
+
+  </Link>
+
+</li>
         <li>
 
           <Link to="/cart">
