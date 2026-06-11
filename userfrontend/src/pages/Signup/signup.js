@@ -2,6 +2,8 @@ import React, {
   useState
 } from "react";
 
+import axios from "axios";
+
 import "./signup.css";
 
 import Navbar
@@ -39,8 +41,6 @@ function Signup() {
       e.target.value
     });
 
-    // Remove Error While Typing
-
     setErrors({
 
       ...errors,
@@ -50,7 +50,7 @@ function Signup() {
     });
   };
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
 
     e.preventDefault();
 
@@ -106,7 +106,7 @@ function Signup() {
         "Minimum 6 characters required";
     }
 
-    // Confirm Password
+    // Confirm Password Validation
 
     if(!confirmPassword){
 
@@ -121,26 +121,7 @@ function Signup() {
         "Passwords do not match";
     }
 
-    // Existing User Check
-
-    const existingUser =
-
-      JSON.parse(
-        localStorage.getItem("customer")
-      );
-
-    if(
-      existingUser &&
-      existingUser.email === email
-    ){
-
-      validationErrors.general =
-        "User already exists";
-    }
-
     setErrors(validationErrors);
-
-    // Stop Validation
 
     if(
       Object.keys(validationErrors)
@@ -149,31 +130,60 @@ function Signup() {
       return;
     }
 
-    // Save User
+    try {
 
-    localStorage.setItem(
+      const response =
 
-      "customer",
+        await axios.post(
 
-      JSON.stringify({
+          "http://localhost:5000/api/auth/register",
 
-        name,
-        email,
-        password
-      })
-    );
+          {
+            name,
+            email,
+            password
+          }
+        );
 
-    // Clear Form
+      if(
+        response.data.success
+      ){
 
-    setFormData({
+        alert(
+          "Registration Successful"
+        );
 
-      name: "",
-      email: "",
-      password: "",
-      confirmPassword: ""
-    });
+        setFormData({
 
-    navigate("/login");
+          name: "",
+          email: "",
+          password: "",
+          confirmPassword: ""
+        });
+
+        navigate("/login");
+      }
+
+    } catch(error){
+
+  console.log("Signup Error:", error);
+
+  console.log(
+    "Response:",
+    error.response?.data
+  );
+
+  setErrors({
+
+    general:
+
+      error.response?.data?.message ||
+
+      error.message ||
+
+      "Registration Failed"
+  });
+}
   };
 
   return (

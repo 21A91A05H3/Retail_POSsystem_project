@@ -17,6 +17,8 @@ import Login
 from "./pages/Login/login";
 import Orders
 from "./pages/Orders/orders";
+import ProtectedRoute
+from "./components/ProtectedRoute/protectedRoute";
 function App() {
 
   return (
@@ -31,9 +33,22 @@ function App() {
         />
 
         <Route
-          path="/cart"
-          element={<Cart />}
-        />
+  path="/cart"
+  element={
+    <ProtectedRoute>
+      <Cart />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/orders"
+  element={
+    <ProtectedRoute>
+      <Orders />
+    </ProtectedRoute>
+  }
+/>
         <Route
   path="/signup"
   element={<Signup />}
@@ -42,10 +57,7 @@ function App() {
   path="/login"
   element={<Login />}
 />
-<Route
-  path="/orders"
-  element={<Orders />}
-/>
+
       </Routes>
 
     </BrowserRouter>

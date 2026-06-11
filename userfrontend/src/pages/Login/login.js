@@ -2,6 +2,8 @@ import React, {
   useState
 } from "react";
 
+import axios from "axios";
+
 import "./login.css";
 
 import Navbar
@@ -26,21 +28,17 @@ function Login() {
   const [errors, setErrors] =
     useState({});
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
 
     e.preventDefault();
 
     let validationErrors = {};
-
-    // Email Validation
 
     if(!email){
 
       validationErrors.email =
         "Email is required";
     }
-
-    // Password Validation
 
     if(!password){
 
@@ -50,8 +48,6 @@ function Login() {
 
     setErrors(validationErrors);
 
-    // Stop Validation
-
     if(
       Object.keys(validationErrors)
       .length > 0
@@ -59,63 +55,61 @@ function Login() {
       return;
     }
 
-    // Fetch User
+    try {
 
-    const storedUser =
+      const response =
 
-      JSON.parse(
-        localStorage.getItem("customer")
-      );
+        await axios.post(
 
-    // User Check
+          "http://localhost:5000/api/auth/login",
 
-    if(!storedUser){
+          {
+            email,
+            password
+          }
+        );
 
-      setErrors({
+      if(
+        response.data.success
+      ){
 
-        general:
-        "No account found. Please signup."
-      });
+        localStorage.setItem(
+          "isLoggedIn",
+          "true"
+        );
 
-      return;
-    }
+        localStorage.setItem(
+          "token",
+          response.data.token
+        );
 
-    // Credential Match
+        localStorage.setItem(
+          "loggedInUser",
+          response.data.user.name
+        );
 
-    if(
+        localStorage.setItem(
+          "userData",
+          JSON.stringify(
+            response.data.user
+          )
+        );
 
-      storedUser.email === email &&
-      storedUser.password === password
+        setEmail("");
+        setPassword("");
 
-    ){
+        navigate("/");
+      }
 
-      // Login Session
-
-      localStorage.setItem(
-        "isLoggedIn",
-        true
-      );
-
-      // Store Username
-
-      localStorage.setItem(
-        "loggedInUser",
-        storedUser.name
-      );
-
-      // Clear Form
-
-      setEmail("");
-      setPassword("");
-
-      navigate("/");
-    }
-    else{
+    } catch(error){
 
       setErrors({
 
         general:
-        "Invalid email or password"
+
+          error.response?.data?.message ||
+
+          "Login Failed"
       });
     }
   };
