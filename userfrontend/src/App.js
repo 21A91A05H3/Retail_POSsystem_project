@@ -15,6 +15,8 @@ import Signup
 from "./pages/Signup/signup";
 import Login
 from "./pages/Login/login";
+import Orders
+from "./pages/Orders/orders";
 function App() {
 
   return (
@@ -39,6 +41,10 @@ function App() {
 <Route
   path="/login"
   element={<Login />}
+/>
+<Route
+  path="/orders"
+  element={<Orders />}
 />
       </Routes>
 

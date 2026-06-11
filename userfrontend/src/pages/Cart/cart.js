@@ -142,9 +142,34 @@ function Cart() {
 
                 setShowModal(true);
 
-                localStorage.removeItem("cart");
+                const existingOrders =
 
-                setCartItems([]);
+  JSON.parse(
+    localStorage.getItem("orders")
+  ) || [];
+
+const newOrder = {
+
+  id: Date.now(),
+
+  items: cartItems,
+
+  total: totalAmount
+};
+
+localStorage.setItem(
+
+  "orders",
+
+  JSON.stringify([
+    ...existingOrders,
+    newOrder
+  ])
+);
+
+localStorage.removeItem("cart");
+
+setCartItems([]);
               }}
             >
 
