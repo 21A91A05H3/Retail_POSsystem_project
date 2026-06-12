@@ -98,16 +98,37 @@ function Login() {
         setEmail("");
         setPassword("");
 
+        alert(
+          "Login Successful"
+        );
+
         navigate("/");
       }
 
     } catch(error){
+
+      console.log(
+        "Login Error:",
+        error
+      );
+
+      console.log(
+        "Response Data:",
+        error.response?.data
+      );
+
+      console.log(
+        "Error Message:",
+        error.message
+      );
 
       setErrors({
 
         general:
 
           error.response?.data?.message ||
+
+          error.message ||
 
           "Login Failed"
       });
@@ -156,7 +177,9 @@ function Login() {
 
             onChange={(e) => {
 
-              setEmail(e.target.value);
+              setEmail(
+                e.target.value
+              );
 
               setErrors({
 
@@ -190,7 +213,9 @@ function Login() {
 
             onChange={(e) => {
 
-              setPassword(e.target.value);
+              setPassword(
+                e.target.value
+              );
 
               setErrors({
 
@@ -213,7 +238,9 @@ function Login() {
             )
           }
 
-          <button className="btn btn-primary w-100">
+          <button
+            className="btn btn-primary w-100"
+          >
 
             Login
 
