@@ -2,7 +2,7 @@ import React, {
   useState,
   useEffect
 } from "react";
-
+import axios from "axios";
 import "./products.css";
 
 import Sidebar
@@ -20,12 +20,7 @@ function Products() {
     useState("");
 
   const [products, setProducts] =
-    useState(
-
-      JSON.parse(
-        localStorage.getItem("products")
-      ) || []
-    );
+  useState([]);
 
   const [search, setSearch] =
     useState("");
@@ -39,78 +34,66 @@ function Products() {
   const [editPrice, setEditPrice] =
     useState("");
 
-  useEffect(() => {
+ useEffect(() => {
 
-    localStorage.setItem(
+  fetchProducts();
 
-      "products",
+}, []);
 
-      JSON.stringify(products)
+const fetchProducts = async () => {
+
+  try {
+
+    const response =
+
+      await axios.get(
+        "http://localhost:5000/api/products"
+      );
+
+    setProducts(
+      response.data.products
     );
 
-  }, [products]);
+  } catch(error){
 
-  const addProduct = (e) => {
+    console.log(error);
+  }
+};
 
-    e.preventDefault();
+const addProduct = async (e) => {
 
-    if(
-      productName === "" ||
-      price === ""
-    ){
-      return;
-    }
+  e.preventDefault();
 
-    const newProduct = {
+  if(
+    productName === "" ||
+    price === ""
+  ){
+    return;
+  }
 
-      id: Date.now(),
+  try {
 
-      name: productName,
+    await axios.post(
 
-      price: price
-    };
+      "http://localhost:5000/api/products",
 
-    setProducts([
-
-      ...products,
-
-      newProduct
-    ]);
-
-    /* Auto Add To Inventory */
-
-    const existingInventory =
-
-      JSON.parse(
-        localStorage.getItem("inventory")
-      ) || [];
-
-    const newInventoryItem = {
-
-      id: newProduct.id,
-
-      product: productName,
-
-      stock: 0
-    };
-
-    localStorage.setItem(
-
-      "inventory",
-
-      JSON.stringify([
-
-        ...existingInventory,
-
-        newInventoryItem
-      ])
+      {
+        name: productName,
+        price: Number(price)
+      }
     );
+
+    fetchProducts();
 
     setProductName("");
 
     setPrice("");
-  };
 
+  } catch(error){
+
+    console.log(error);
+  }
+};
   const deleteProduct = (id) => {
 
     const updatedProducts =
