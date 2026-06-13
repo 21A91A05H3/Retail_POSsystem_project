@@ -3,6 +3,8 @@ import React, {
   useState
 } from "react";
 
+import axios from "axios";
+
 import "./cart.css";
 
 import Navbar
@@ -34,13 +36,15 @@ function Cart() {
 
       cartItems.filter(
         (item) =>
-          item.id !== id
+          item._id !== id
       );
 
     setCartItems(updatedCart);
 
     localStorage.setItem(
+
       "cart",
+
       JSON.stringify(updatedCart)
     );
   };
@@ -52,10 +56,67 @@ function Cart() {
       (total, item) =>
 
         total +
-        item.price * item.quantity,
+        item.price *
+        item.quantity,
 
       0
     );
+
+  const handleCheckout = async () => {
+
+    try {
+
+      const customerName =
+
+        localStorage.getItem(
+          "loggedInUser"
+        ) || "Guest";
+
+      const products =
+
+        cartItems.map((item) => ({
+
+          productName:
+            item.name,
+
+          quantity:
+            item.quantity,
+
+          price:
+            item.price
+        }));
+
+      await axios.post(
+
+        "http://localhost:5000/api/orders",
+
+        {
+          customerName,
+          products,
+          totalAmount
+        }
+      );
+
+      localStorage.removeItem(
+        "cart"
+      );
+
+      setCartItems([]);
+
+      setShowModal(true);
+
+    } catch(error){
+
+      console.log(
+        "Order Error:",
+        error
+      );
+
+      alert(
+        "Failed to Place Order"
+      );
+    }
+  };
 
   return (
 
@@ -73,6 +134,7 @@ function Cart() {
 
         {
           cartItems.length === 0
+
           ?
 
           <h4 className="text-center">
@@ -87,21 +149,29 @@ function Cart() {
 
             <div
               className="cart-card"
-              key={item.id}
+              key={item._id}
             >
 
               <div>
 
                 <h5>
+
                   {item.name}
+
                 </h5>
 
                 <p>
+
                   ₹{item.price}
+
                 </p>
 
                 <p>
-                  Qty: {item.quantity}
+
+                  Qty:
+                  {" "}
+                  {item.quantity}
+
                 </p>
 
               </div>
@@ -110,7 +180,9 @@ function Cart() {
                 className="btn btn-danger"
 
                 onClick={() =>
-                  removeItem(item.id)
+                  removeItem(
+                    item._id
+                  )
                 }
               >
 
@@ -138,39 +210,9 @@ function Cart() {
             <button
               className="btn btn-success mt-3"
 
-              onClick={() => {
-
-                setShowModal(true);
-
-                const existingOrders =
-
-  JSON.parse(
-    localStorage.getItem("orders")
-  ) || [];
-
-const newOrder = {
-
-  id: Date.now(),
-
-  items: cartItems,
-
-  total: totalAmount
-};
-
-localStorage.setItem(
-
-  "orders",
-
-  JSON.stringify([
-    ...existingOrders,
-    newOrder
-  ])
-);
-
-localStorage.removeItem("cart");
-
-setCartItems([]);
-              }}
+              onClick={
+                handleCheckout
+              }
             >
 
               Checkout

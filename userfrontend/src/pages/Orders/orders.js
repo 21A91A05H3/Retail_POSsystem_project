@@ -3,6 +3,8 @@ import React, {
   useState
 } from "react";
 
+import axios from "axios";
+
 import Navbar
 from "../../components/Navbar/navbar";
 
@@ -15,15 +17,32 @@ function Orders() {
 
   useEffect(() => {
 
-    const storedOrders =
-
-      JSON.parse(
-        localStorage.getItem("orders")
-      ) || [];
-
-    setOrders(storedOrders);
+    fetchOrders();
 
   }, []);
+
+  const fetchOrders = async () => {
+
+    try {
+
+      const response =
+
+        await axios.get(
+          "http://localhost:5000/api/orders"
+        );
+
+      setOrders(
+        response.data.orders
+      );
+
+    } catch(error){
+
+      console.log(
+        "Order Fetch Error:",
+        error
+      );
+    }
+  };
 
   return (
 
@@ -41,6 +60,7 @@ function Orders() {
 
         {
           orders.length === 0
+
           ?
 
           <h4 className="text-center">
@@ -55,22 +75,30 @@ function Orders() {
 
             <div
               className="order-card"
-              key={order.id}
+              key={order._id}
             >
 
               <h5>
 
                 Order ID:
                 {" "}
-                #{order.id}
+                {order._id}
 
               </h5>
 
               <p>
 
+                Customer:
+                {" "}
+                {order.customerName}
+
+              </p>
+
+              <p>
+
                 Total:
                 {" "}
-                ₹{order.total}
+                ₹{order.totalAmount}
 
               </p>
 
@@ -81,6 +109,48 @@ function Orders() {
                 Placed
 
               </p>
+
+              <h6>
+
+                Products:
+
+              </h6>
+
+              <ul>
+
+                {
+                  order.products.map(
+                    (product, index) => (
+
+                      <li
+                        key={index}
+                      >
+
+                        {
+                          product.productName
+                        }
+
+                        {" - "}
+
+                        Qty:
+                        {" "}
+
+                        {
+                          product.quantity
+                        }
+
+                        {" - ₹"}
+
+                        {
+                          product.price
+                        }
+
+                      </li>
+                    )
+                  )
+                }
+
+              </ul>
 
             </div>
           ))
