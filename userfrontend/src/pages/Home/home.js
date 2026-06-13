@@ -3,6 +3,8 @@ import React, {
   useState
 } from "react";
 
+import axios from "axios";
+
 import "./home.css";
 
 import Navbar
@@ -18,36 +20,32 @@ function Home() {
 
   useEffect(() => {
 
-    const storedProducts = [
-
-      {
-        id: 1,
-        name: "Tea",
-        price: 20
-      },
-
-      {
-        id: 2,
-        name: "Coffee",
-        price: 50
-      },
-
-      {
-        id: 3,
-        name: "Milk",
-        price: 40
-      },
-
-      {
-        id: 4,
-        name: "Rice",
-        price: 100
-      }
-    ];
-
-    setProducts(storedProducts);
+    fetchProducts();
 
   }, []);
+
+  const fetchProducts = async () => {
+
+    try {
+
+      const response =
+
+        await axios.get(
+          "http://localhost:5000/api/products"
+        );
+
+      setProducts(
+        response.data.products
+      );
+
+    } catch(error){
+
+      console.log(
+        "Product Fetch Error:",
+        error
+      );
+    }
+  };
 
   const addToCart = (product) => {
 
@@ -55,7 +53,7 @@ function Home() {
 
       cart.find(
         (item) =>
-          item.id === product.id
+          item._id === product._id
       );
 
     let updatedCart;
@@ -66,13 +64,18 @@ function Home() {
 
         cart.map((item) =>
 
-          item.id === product.id
+          item._id === product._id
+
           ?
+
           {
             ...item,
-            quantity: item.quantity + 1
+            quantity:
+            item.quantity + 1
           }
+
           :
+
           item
         );
     }
@@ -92,11 +95,15 @@ function Home() {
     setCart(updatedCart);
 
     localStorage.setItem(
+
       "cart",
+
       JSON.stringify(updatedCart)
     );
 
-    alert(`${product.name} added to cart`);
+    alert(
+      `${product.name} added to cart`
+    );
   };
 
   return (
@@ -104,8 +111,6 @@ function Home() {
     <div>
 
       <Navbar />
-
-      {/* Hero Section */}
 
       <div className="hero-section">
 
@@ -129,8 +134,6 @@ function Home() {
 
       </div>
 
-      {/* Products Section */}
-
       <div className="products-section container">
 
         <h2 className="text-center mb-4">
@@ -142,16 +145,43 @@ function Home() {
         <div className="row">
 
           {
+            products.length === 0
+
+            ?
+
+            <h4 className="text-center">
+
+              No Products Available
+
+            </h4>
+
+            :
+
             products.map((product) => (
 
               <div
                 className="col-md-3 mb-4"
-                key={product.id}
+                key={product._id}
               >
 
                 <div className="card product-card">
 
                   <div className="card-body text-center">
+
+                    {
+                      product.image && (
+
+                        <img
+                          src={product.image}
+                          alt={product.name}
+                          className="img-fluid mb-2"
+                          style={{
+                            height: "150px",
+                            objectFit: "cover"
+                          }}
+                        />
+                      )
+                    }
 
                     <h5>
 
@@ -165,6 +195,14 @@ function Home() {
 
                     </p>
 
+                    <p>
+
+                      Stock:
+                      {" "}
+                      {product.stock}
+
+                    </p>
+
                     <button
                       className="btn btn-primary"
 
@@ -173,7 +211,7 @@ function Home() {
                       }
                     >
 
-                      Add to Cart
+                      Add To Cart
 
                     </button>
 
