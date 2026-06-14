@@ -52,7 +52,7 @@ function Orders() {
 
       <div className="orders-container container">
 
-        <h2 className="text-center mb-4">
+        <h2 className="orders-title">
 
           My Orders
 
@@ -63,7 +63,7 @@ function Orders() {
 
           ?
 
-          <h4 className="text-center">
+          <h4 className="no-orders">
 
             No Orders Found
 
@@ -78,7 +78,7 @@ function Orders() {
               key={order._id}
             >
 
-              <h5>
+              <h5 className="order-id">
 
                 Order ID:
                 {" "}
@@ -88,7 +88,9 @@ function Orders() {
 
               <p>
 
-                Customer:
+                <strong>
+                  Customer:
+                </strong>
                 {" "}
                 {order.customerName}
 
@@ -96,7 +98,9 @@ function Orders() {
 
               <p>
 
-                Total:
+                <strong>
+                  Total:
+                </strong>
                 {" "}
                 ₹{order.totalAmount}
 
@@ -104,19 +108,47 @@ function Orders() {
 
               <p>
 
+                <strong>
+                  Date:
+                </strong>
+                {" "}
+                {
+                  new Date(
+                    order.createdAt
+                  ).toLocaleDateString()
+                }
+
+              </p>
+
+              <p>
+
+                <strong>
+                  Time:
+                </strong>
+                {" "}
+                {
+                  new Date(
+                    order.createdAt
+                  ).toLocaleTimeString()
+                }
+
+              </p>
+
+              <p className="status">
+
                 Status:
                 {" "}
-                Placed
+                Placed ✅
 
               </p>
 
               <h6>
 
-                Products:
+                Products Ordered
 
               </h6>
 
-              <ul>
+              <ul className="products-list">
 
                 {
                   order.products.map(
@@ -126,24 +158,15 @@ function Orders() {
                         key={index}
                       >
 
-                        {
-                          product.productName
-                        }
+                        {product.productName}
 
-                        {" - "}
+                        {" | Qty: "}
 
-                        Qty:
-                        {" "}
+                        {product.quantity}
 
-                        {
-                          product.quantity
-                        }
+                        {" | ₹"}
 
-                        {" - ₹"}
-
-                        {
-                          product.price
-                        }
+                        {product.price}
 
                       </li>
                     )
