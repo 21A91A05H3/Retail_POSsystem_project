@@ -31,8 +31,24 @@ function Orders() {
           "http://localhost:5000/api/orders"
         );
 
+      const loggedInUser =
+
+        localStorage.getItem(
+          "loggedInUser"
+        );
+
+      const filteredOrders =
+
+        response.data.orders.filter(
+
+          (order) =>
+
+            order.customerName ===
+            loggedInUser
+        );
+
       setOrders(
-        response.data.orders
+        filteredOrders
       );
 
     } catch(error){
@@ -158,7 +174,9 @@ function Orders() {
                         key={index}
                       >
 
-                        {product.productName}
+                        <strong>
+                          {product.productName}
+                        </strong>
 
                         {" | Qty: "}
 
