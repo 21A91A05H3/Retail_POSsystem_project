@@ -177,6 +177,7 @@ function Home() {
                           className="img-fluid mb-2"
                           style={{
                             height: "150px",
+                            width: "100%",
                             objectFit: "cover"
                           }}
                         />
@@ -203,15 +204,59 @@ function Home() {
 
                     </p>
 
+                    {
+                      product.stock === 0 ? (
+
+                        <p className="out-stock">
+
+                          Out Of Stock ❌
+
+                        </p>
+
+                      ) : product.stock <= 5 ? (
+
+                        <p className="low-stock">
+
+                          Low Stock ⚠️
+
+                        </p>
+
+                      ) : null
+                    }
+
                     <button
-                      className="btn btn-primary"
+                      className={
+                        product.stock === 0
+
+                        ?
+
+                        "btn btn-secondary"
+
+                        :
+
+                        "btn btn-primary"
+                      }
+
+                      disabled={
+                        product.stock === 0
+                      }
 
                       onClick={() =>
                         addToCart(product)
                       }
                     >
 
-                      Add To Cart
+                      {
+                        product.stock === 0
+
+                        ?
+
+                        "Out Of Stock"
+
+                        :
+
+                        "Add To Cart"
+                      }
 
                     </button>
 
