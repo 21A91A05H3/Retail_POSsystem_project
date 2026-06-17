@@ -19,13 +19,11 @@ function Navbar() {
     useNavigate();
 
   const isLoggedIn =
-
     localStorage.getItem(
       "isLoggedIn"
     );
 
   const loggedInUser =
-
     localStorage.getItem(
       "loggedInUser"
     );
@@ -48,7 +46,23 @@ function Navbar() {
         "loggedInUser"
       );
 
-      navigate("/");
+      localStorage.removeItem(
+        "token"
+      );
+
+      localStorage.removeItem(
+        "userData"
+      );
+
+      localStorage.removeItem(
+        "cart"
+      );
+
+      alert(
+        "Logged Out Successfully"
+      );
+
+      navigate("/login");
     }
   };
 
@@ -73,31 +87,44 @@ function Navbar() {
           </Link>
 
         </li>
-          <li>
 
-  <Link to="/orders">
+        {
+          isLoggedIn && (
 
-    Orders
+            <li>
 
-  </Link>
+              <Link to="/orders">
 
-</li>
-        <li>
+                Orders
 
-          <Link to="/cart">
+              </Link>
 
-            <FaShoppingCart />
+            </li>
+          )
+        }
 
-            {" "}
+        {
+          isLoggedIn && (
 
-            Cart
+            <li>
 
-          </Link>
+              <Link to="/cart">
 
-        </li>
+                <FaShoppingCart />
+
+                {" "}
+
+                Cart
+
+              </Link>
+
+            </li>
+          )
+        }
 
         {
           isLoggedIn
+
           ?
 
           <>
@@ -105,7 +132,9 @@ function Navbar() {
             <li className="user-name">
 
               Hi,
+
               {" "}
+
               {loggedInUser}
 
             </li>
@@ -114,7 +143,6 @@ function Navbar() {
 
               <button
                 className="logout-btn"
-
                 onClick={handleLogout}
               >
 
