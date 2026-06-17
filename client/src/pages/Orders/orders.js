@@ -1,6 +1,9 @@
 import React, {
-  useState
+  useState,
+  useEffect
 } from "react";
+
+import axios from "axios";
 
 import "./orders.css";
 
@@ -12,43 +15,51 @@ from "../../components/Navbar/navbar";
 
 function Orders() {
 
+  const [orders, setOrders] =
+    useState([]);
+
   const [search, setSearch] =
     useState("");
 
-  const [paymentFilter, setPaymentFilter] =
-    useState("All");
+  useEffect(() => {
 
-  const orders =
+    fetchOrders();
 
-    JSON.parse(
-      localStorage.getItem("orders")
-    ) || [];
+  }, []);
+
+  const fetchOrders = async () => {
+
+    try {
+
+      const response =
+
+        await axios.get(
+          "http://localhost:5000/api/orders"
+        );
+
+      setOrders(
+        response.data.orders
+      );
+
+    } catch(error){
+
+      console.log(
+        "Order Fetch Error:",
+        error
+      );
+    }
+  };
 
   const filteredOrders =
 
-    orders.filter((order) => {
+    orders.filter((order) =>
 
-      const matchesSearch =
-
-        order.customer
-          .toLowerCase()
-          .includes(
-
-            search.toLowerCase()
-          );
-
-      const matchesPayment =
-
-        paymentFilter === "All"
-        ||
-        order.payment === paymentFilter;
-
-      return (
-
-        matchesSearch &&
-        matchesPayment
-      );
-    });
+      (order.customerName || "")
+        .toLowerCase()
+        .includes(
+          search.toLowerCase()
+        )
+    );
 
   return (
 
@@ -66,63 +77,22 @@ function Orders() {
 
         </h2>
 
-        {/* Search and Filter */}
+        <input
 
-        <div className="orders-filters">
+          type="text"
 
-          <input
+          placeholder="Search Customer"
 
-            type="text"
+          className="form-control search-input"
 
-            placeholder="Search Customer"
+          value={search}
 
-            className="form-control search-input"
-
-            value={search}
-
-            onChange={(e) =>
-              setSearch(
-                e.target.value
-              )
-            }
-          />
-
-          <select
-
-            className="form-select filter-select"
-
-            value={paymentFilter}
-
-            onChange={(e) =>
-              setPaymentFilter(
-                e.target.value
-              )
-            }
-          >
-
-            <option value="All">
-
-              All Payments
-
-            </option>
-
-            <option value="Paid">
-
-              Paid
-
-            </option>
-
-            <option value="Pending">
-
-              Pending
-
-            </option>
-
-          </select>
-
-        </div>
-
-        {/* Orders Table */}
+          onChange={(e) =>
+            setSearch(
+              e.target.value
+            )
+          }
+        />
 
         <div className="orders-table">
 
@@ -138,7 +108,7 @@ function Orders() {
 
                 <th>Amount</th>
 
-                <th>Payment</th>
+                <th>Date</th>
 
                 <th>Status</th>
 
@@ -150,13 +120,13 @@ function Orders() {
 
               {
                 filteredOrders.length === 0
+
                 ?
 
                 <tr>
 
                   <td
                     colSpan="5"
-
                     className="text-center text-muted"
                   >
 
@@ -170,61 +140,43 @@ function Orders() {
 
                 filteredOrders.map((order) => (
 
-                  <tr key={order.id}>
+                  <tr key={order._id}>
 
                     <td>
 
-                      #{order.id}
+                      {order._id}
 
                     </td>
 
                     <td>
 
-                      {order.customer}
+                      {order.customerName}
 
                     </td>
 
                     <td>
 
-                      ₹{order.amount}
+                      ₹{order.totalAmount}
 
                     </td>
 
                     <td>
 
-                      <span
-                        className={
-                          order.payment === "Paid"
-                          ?
-                          "badge bg-success"
-                          :
-                          "badge bg-warning text-dark"
-                        }
-                      >
-
-                        {order.payment}
-
-                      </span>
+                      {
+                        new Date(
+                          order.createdAt
+                        ).toLocaleDateString()
+                      }
 
                     </td>
 
                     <td>
 
                       <span
-                        className={
-                          order.status === "Delivered"
-                          ?
-                          "badge bg-primary"
-                          :
-                          order.status === "Processing"
-                          ?
-                          "badge bg-info text-dark"
-                          :
-                          "badge bg-secondary"
-                        }
+                        className="badge bg-success"
                       >
 
-                        {order.status}
+                        Placed
 
                       </span>
 

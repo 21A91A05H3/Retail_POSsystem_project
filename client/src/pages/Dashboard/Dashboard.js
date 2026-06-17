@@ -1,4 +1,9 @@
-import React from "react";
+import React, {
+  useEffect,
+  useState
+} from "react";
+
+import axios from "axios";
 
 import "./Dashboard.css";
 
@@ -8,13 +13,69 @@ from "../../components/Sidebar/sidebar";
 import Navbar
 from "../../components/Navbar/navbar";
 
-import DashboardCards
-from "../../components/DashboardCards/dashboardcards";
-
-import SalesChart
-from "../../components/SalesChart/saleschart";
-
 function Dashboard() {
+
+  const [totalRevenue, setTotalRevenue] =
+    useState(0);
+
+  const [totalOrders, setTotalOrders] =
+    useState(0);
+
+  const [totalProducts, setTotalProducts] =
+    useState(0);
+
+  const [lowStockProducts, setLowStockProducts] =
+    useState(0);
+
+  useEffect(() => {
+
+    fetchDashboardData();
+
+  }, []);
+
+  const fetchDashboardData = async () => {
+
+    try {
+
+      const analytics =
+
+        await axios.get(
+          "http://localhost:5000/api/orders/analytics"
+        );
+
+      const products =
+
+        await axios.get(
+          "http://localhost:5000/api/products"
+        );
+
+      const lowStock =
+
+        await axios.get(
+          "http://localhost:5000/api/products/low-stock"
+        );
+
+      setTotalRevenue(
+        analytics.data.totalRevenue
+      );
+
+      setTotalOrders(
+        analytics.data.totalOrders
+      );
+
+      setTotalProducts(
+        products.data.products.length
+      );
+
+      setLowStockProducts(
+        lowStock.data.count
+      );
+
+    } catch(error){
+
+      console.log(error);
+    }
+  };
 
   return (
 
@@ -29,21 +90,105 @@ function Dashboard() {
         <div className="dashboard-header">
 
           <h1>
+
             Dashboard
+
           </h1>
 
           <p>
+
             Welcome to Retail POS &
             Inventory Management System
+
           </p>
 
         </div>
 
-        <DashboardCards />
+        <div className="row">
 
-        <SalesChart />
+          <div className="col-md-3">
 
-        <footer className="footer">
+            <div className="card p-3 shadow">
+
+              <h5>
+
+                Total Revenue
+
+              </h5>
+
+              <h2>
+
+                ₹{totalRevenue}
+
+              </h2>
+
+            </div>
+
+          </div>
+
+          <div className="col-md-3">
+
+            <div className="card p-3 shadow">
+
+              <h5>
+
+                Total Orders
+
+              </h5>
+
+              <h2>
+
+                {totalOrders}
+
+              </h2>
+
+            </div>
+
+          </div>
+
+          <div className="col-md-3">
+
+            <div className="card p-3 shadow">
+
+              <h5>
+
+                Total Products
+
+              </h5>
+
+              <h2>
+
+                {totalProducts}
+
+              </h2>
+
+            </div>
+
+          </div>
+
+          <div className="col-md-3">
+
+            <div className="card p-3 shadow">
+
+              <h5>
+
+                Low Stock
+
+              </h5>
+
+              <h2>
+
+                {lowStockProducts}
+
+              </h2>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <footer className="footer mt-5">
 
           © 2026 Retail POS System
 

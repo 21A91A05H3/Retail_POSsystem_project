@@ -1,7 +1,6 @@
 import React from "react";
+
 import "./navbar.css";
-
-
 
 import {
   FaBell,
@@ -9,8 +8,19 @@ import {
   FaUserCircle
 } from "react-icons/fa";
 
+import { useNavigate } from "react-router-dom";
+
 function Navbar() {
-  
+
+  const navigate =
+    useNavigate();
+
+  const handleLogout = () => {
+
+  localStorage.clear();
+
+  navigate("/");
+};
 
   return (
 
@@ -19,7 +29,9 @@ function Navbar() {
       <div className="navbar-left">
 
         <h3>
+
           Welcome Back 👋
+
         </h3>
 
       </div>
@@ -40,6 +52,15 @@ function Navbar() {
         <FaBell className="nav-icon" />
 
         <FaUserCircle className="profile-icon" />
+
+        <button
+          className="btn btn-danger ms-3"
+          onClick={handleLogout}
+        >
+
+          Logout
+
+        </button>
 
       </div>
 
