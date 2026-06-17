@@ -1,58 +1,64 @@
-import React, { useState } from "react";
+import React, {
+  useState,
+  useEffect
+} from "react";
+
+import axios from "axios";
+
 import "./customers.css";
 
-import Sidebar from "../../components/Sidebar/sidebar";
-import Navbar from "../../components/Navbar/navbar";
+import Sidebar
+from "../../components/Sidebar/sidebar";
+
+import Navbar
+from "../../components/Navbar/navbar";
 
 function Customers() {
+
+  const [customers, setCustomers] =
+    useState([]);
 
   const [search, setSearch] =
     useState("");
 
-  const customers = [
+  useEffect(() => {
 
-    {
-      id: 1,
-      name: "Rahul Sharma",
-      email: "rahul@gmail.com",
-      phone: "9876543210",
-      orders: 12
-    },
+    fetchCustomers();
 
-    {
-      id: 2,
-      name: "Priya Reddy",
-      email: "priya@gmail.com",
-      phone: "9876543211",
-      orders: 8
-    },
+  }, []);
 
-    {
-      id: 3,
-      name: "Arjun Kumar",
-      email: "arjun@gmail.com",
-      phone: "9876543212",
-      orders: 15
-    },
+  const fetchCustomers = async () => {
 
-    {
-      id: 4,
-      name: "Sneha Patel",
-      email: "sneha@gmail.com",
-      phone: "9876543213",
-      orders: 5
+    try {
+
+      const response =
+
+        await axios.get(
+          "http://localhost:5000/api/auth/users"
+        );
+
+      setCustomers(
+        response.data.users
+      );
+
+    } catch(error){
+
+      console.log(
+        "Customer Fetch Error:",
+        error
+      );
     }
-
-  ];
+  };
 
   const filteredCustomers =
+
     customers.filter((customer) =>
 
-      customer.name
-        .toLowerCase()
-        .includes(
-          search.toLowerCase()
-        )
+      (customer.name || "")
+      .toLowerCase()
+      .includes(
+        search.toLowerCase()
+      )
     );
 
   return (
@@ -66,10 +72,10 @@ function Customers() {
         <Navbar />
 
         <h2 className="mb-4">
-          Customers Management
-        </h2>
 
-        {/* Search Input */}
+          Customers Management
+
+        </h2>
 
         <input
 
@@ -82,11 +88,11 @@ function Customers() {
           value={search}
 
           onChange={(e) =>
-            setSearch(e.target.value)
+            setSearch(
+              e.target.value
+            )
           }
         />
-
-        {/* Customers Table */}
 
         <div className="customers-table">
 
@@ -102,9 +108,9 @@ function Customers() {
 
                 <th>Email</th>
 
-                <th>Phone</th>
+                <th>Role</th>
 
-                <th>Total Orders</th>
+                <th>Joined Date</th>
 
               </tr>
 
@@ -113,33 +119,66 @@ function Customers() {
             <tbody>
 
               {
+                filteredCustomers.length === 0
+
+                ?
+
+                <tr>
+
+                  <td
+                    colSpan="5"
+                    className="text-center"
+                  >
+
+                    No Customers Found
+
+                  </td>
+
+                </tr>
+
+                :
+
                 filteredCustomers.map((customer) => (
 
-                  <tr key={customer.id}>
+                  <tr key={customer._id}>
 
                     <td>
-                      {customer.id}
+
+                      {
+                        customer._id.slice(-6)
+                      }
+
                     </td>
 
                     <td>
+
                       {customer.name}
+
                     </td>
 
                     <td>
+
                       {customer.email}
-                    </td>
 
-                    <td>
-                      {customer.phone}
                     </td>
 
                     <td>
 
                       <span className="badge bg-primary">
 
-                        {customer.orders}
+                        {customer.role}
 
                       </span>
+
+                    </td>
+
+                    <td>
+
+                      {
+                        new Date(
+                          customer.createdAt
+                        ).toLocaleDateString()
+                      }
 
                     </td>
 

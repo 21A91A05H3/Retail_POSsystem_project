@@ -109,6 +109,7 @@ function Orders() {
                 <th>Amount</th>
 
                 <th>Date</th>
+                <th>Time</th>
 
                 <th>Status</th>
 
@@ -144,7 +145,7 @@ function Orders() {
 
                     <td>
 
-                      {order._id}
+                    {order._id.slice(-8)}
 
                     </td>
 
@@ -169,6 +170,13 @@ function Orders() {
                       }
 
                     </td>
+                    <td>
+  {
+    new Date(
+      order.createdAt
+    ).toLocaleTimeString()
+  }
+</td>
 
                     <td>
 
