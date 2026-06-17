@@ -1,5 +1,6 @@
 import React, {
-  useState
+  useState,
+  useEffect
 } from "react";
 
 import axios from "axios";
@@ -27,6 +28,22 @@ function Login() {
 
   const [errors, setErrors] =
     useState({});
+
+  useEffect(() => {
+
+    const token =
+
+      localStorage.getItem(
+        "token"
+      );
+
+    if(token){
+
+      navigate("/");
+
+    }
+
+  }, [navigate]);
 
   const handleLogin = async (e) => {
 
@@ -96,6 +113,7 @@ function Login() {
         );
 
         setEmail("");
+
         setPassword("");
 
         alert(
@@ -103,6 +121,7 @@ function Login() {
         );
 
         navigate("/");
+
       }
 
     } catch(error){
@@ -112,23 +131,11 @@ function Login() {
         error
       );
 
-      console.log(
-        "Response Data:",
-        error.response?.data
-      );
-
-      console.log(
-        "Error Message:",
-        error.message
-      );
-
       setErrors({
 
         general:
 
           error.response?.data?.message ||
-
-          error.message ||
 
           "Login Failed"
       });
@@ -145,7 +152,6 @@ function Login() {
 
         <form
           className="login-form"
-
           onSubmit={handleLogin}
         >
 
@@ -186,6 +192,7 @@ function Login() {
                 ...errors,
 
                 email: "",
+
                 general: ""
               });
             }}
@@ -222,6 +229,7 @@ function Login() {
                 ...errors,
 
                 password: "",
+
                 general: ""
               });
             }}
@@ -239,6 +247,7 @@ function Login() {
           }
 
           <button
+            type="submit"
             className="btn btn-primary w-100"
           >
 
@@ -246,9 +255,9 @@ function Login() {
 
           </button>
 
-          <p className="text-center">
+          <p className="text-center mt-3">
 
-            Don't have account?
+            Don't have an account?
 
             {" "}
 
