@@ -338,10 +338,10 @@ const addProduct = async (e) => {
 
                 filteredProducts.map((product) => (
 
-                  <tr key={product.id}>
+                  <tr key={product._id}>
 
                     <td>
-                      {product.id}
+                      {product._id}
                     </td>
 
                     <td>
@@ -371,7 +371,7 @@ const addProduct = async (e) => {
                     <td>
 
                       {
-                        editId === product.id
+                        editId === product._id
                         ?
                         <input
                           type="number"
