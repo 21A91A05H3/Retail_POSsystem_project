@@ -20,10 +20,30 @@ function Home() {
 
   useEffect(() => {
 
+  fetchProducts();
+
+  const interval = setInterval(() => {
+
     fetchProducts();
 
-  }, []);
+  }, 3000);
 
+  return () => clearInterval(interval);
+
+}, []);
+   useEffect(() => {
+
+  fetchProducts();
+
+  const interval = setInterval(() => {
+
+    fetchProducts();
+
+  }, 3000);
+
+  return () => clearInterval(interval);
+
+}, []);
   const fetchProducts = async () => {
 
     try {

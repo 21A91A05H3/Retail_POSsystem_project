@@ -6,15 +6,21 @@ import {
 
 function ProtectedRoute({ children }) {
 
+  const token =
+    localStorage.getItem("token");
+
   const isLoggedIn =
+    localStorage.getItem("isLoggedIn");
 
-    localStorage.getItem(
-      "isLoggedIn"
-    );
+  if (
+    !token ||
+    isLoggedIn !== "true"
+  ) {
 
-  return isLoggedIn
-    ? children
-    : <Navigate to="/login" />;
+    return <Navigate to="/login" />;
+  }
+
+  return children;
 }
 
 export default ProtectedRoute;
