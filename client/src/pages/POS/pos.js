@@ -1,6 +1,9 @@
 import React, {
-  useState
+  useState,
+  useEffect
 } from "react";
+
+import axios from "axios";
 
 import "./pos.css";
 
@@ -15,14 +18,37 @@ from "../../components/Invoice/invoice";
 
 function POS() {
 
-  const products =
-
-    JSON.parse(
-      localStorage.getItem("products")
-    ) || [];
+  const [products, setProducts] =
+    useState([]);
 
   const [cart, setCart] =
     useState([]);
+
+  useEffect(() => {
+
+    fetchProducts();
+
+  }, []);
+
+  const fetchProducts = async () => {
+
+    try {
+
+      const response =
+
+        await axios.get(
+          "http://localhost:5000/api/products"
+        );
+
+      setProducts(
+        response.data.products
+      );
+
+    } catch(error){
+
+      console.log(error);
+    }
+  };
 
   const addToCart = (product) => {
 
@@ -30,7 +56,7 @@ function POS() {
 
       cart.find(
         (item) =>
-          item.id === product.id
+          item._id === product._id
       );
 
     if(existingProduct){
@@ -39,15 +65,18 @@ function POS() {
 
         cart.map((item) =>
 
-          item.id === product.id
+          item._id === product._id
+
           ?
+
           {
             ...item,
-
             quantity:
               item.quantity + 1
           }
+
           :
+
           item
         );
 
@@ -62,7 +91,6 @@ function POS() {
 
         {
           ...product,
-
           quantity: 1
         }
       ]);
@@ -75,7 +103,7 @@ function POS() {
 
       cart.filter(
         (item) =>
-          item.id !== id
+          item._id !== id
       );
 
     setCart(updatedCart);
@@ -88,10 +116,75 @@ function POS() {
       (total, item) =>
 
         total +
-        item.price * item.quantity,
+        item.price *
+        item.quantity,
 
       0
     );
+
+  const handleCheckout = async () => {
+
+    try {
+
+      const productsData =
+
+        cart.map((item) => ({
+
+          productName:
+            item.name,
+
+          quantity:
+            item.quantity,
+
+          price:
+            item.price
+        }));
+
+      await axios.post(
+
+        "http://localhost:5000/api/orders",
+
+        {
+          customerName:
+            "Walk-in Customer",
+
+          products:
+            productsData,
+
+          totalAmount
+        }
+      );
+
+      for(const item of cart){
+
+        await axios.put(
+
+          `http://localhost:5000/api/inventory/decrease/${item._id}`,
+
+          {
+            quantity:
+              item.quantity
+          }
+        );
+      }
+
+      alert(
+        "Order Placed Successfully"
+      );
+
+      setCart([]);
+
+      fetchProducts();
+
+    } catch(error){
+
+      console.log(error);
+
+      alert(
+        "Failed To Place Order"
+      );
+    }
+  };
 
   return (
 
@@ -111,21 +204,22 @@ function POS() {
 
         <div className="pos-container">
 
-          {/* Products Section */}
-
           <div className="products-section">
 
             <h4>
+
               Products
+
             </h4>
 
             <div className="products-grid">
 
               {
                 products.length === 0
+
                 ?
 
-                <p className="text-muted">
+                <p>
 
                   No Products Available
 
@@ -137,20 +231,35 @@ function POS() {
 
                   <div
                     className="product-card"
-
-                    key={product.id}
+                    key={product._id}
                   >
 
                     <h5>
+
                       {product.name}
+
                     </h5>
 
                     <p>
+
                       ₹{product.price}
+
+                    </p>
+
+                    <p>
+
+                      Stock:
+                      {" "}
+                      {product.stock}
+
                     </p>
 
                     <button
                       className="btn btn-primary"
+
+                      disabled={
+                        product.stock === 0
+                      }
 
                       onClick={() =>
                         addToCart(product)
@@ -169,20 +278,23 @@ function POS() {
 
           </div>
 
-          {/* Cart Section */}
-
           <div className="cart-section">
 
             <h4>
+
               Cart
+
             </h4>
 
             {
               cart.length === 0
+
               ?
 
               <p>
+
                 No items added
+
               </p>
 
               :
@@ -191,37 +303,38 @@ function POS() {
 
                 <div
                   className="cart-item"
-
-                  key={item.id}
+                  key={item._id}
                 >
 
                   <div>
 
                     <h6>
+
                       {item.name}
+
                     </h6>
 
                     <p>
+
                       ₹{item.price}
+
                     </p>
 
                   </div>
 
-                  <div className="cart-actions">
+                  <div>
 
-                    <span>
-
-                      Qty:
-                      {" "}
-                      {item.quantity}
-
-                    </span>
+                    Qty:
+                    {" "}
+                    {item.quantity}
 
                     <button
-                      className="btn btn-danger btn-sm"
+                      className="btn btn-danger btn-sm ms-2"
 
                       onClick={() =>
-                        removeFromCart(item.id)
+                        removeFromCart(
+                          item._id
+                        )
                       }
                     >
 
@@ -246,64 +359,30 @@ function POS() {
             </h4>
 
             <button
-  className="btn btn-success w-100 mt-3"
+              className="btn btn-success w-100 mt-3"
 
-  onClick={() => {
+              disabled={
+                cart.length === 0
+              }
 
-    const existingOrders =
+              onClick={
+                handleCheckout
+              }
+            >
 
-      JSON.parse(
-        localStorage.getItem("orders")
-      ) || [];
+              Checkout
 
-    const newOrder = {
+            </button>
 
-      id: Date.now(),
-
-      customer: "Walk-in Customer",
-
-      amount: totalAmount,
-
-      payment: "Paid",
-
-      status: "Delivered",
-
-      items: cart
-    };
-
-    localStorage.setItem(
-
-      "orders",
-
-      JSON.stringify([
-
-        ...existingOrders,
-
-        newOrder
-      ])
-    );
-
-    alert("Order Placed Successfully");
-
-    setCart([]);
-  }}
->
-
-  Checkout
-
-</button>
           </div>
 
         </div>
-
-        {/* Invoice Section */}
 
         {
           cart.length > 0 && (
 
             <Invoice
               cart={cart}
-
               totalAmount={totalAmount}
             />
           )

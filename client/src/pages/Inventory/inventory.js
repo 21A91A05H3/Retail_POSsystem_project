@@ -3,6 +3,8 @@ import React, {
   useEffect
 } from "react";
 
+import axios from "axios";
+
 import "./inventory.css";
 
 import Sidebar
@@ -13,133 +15,93 @@ from "../../components/Navbar/navbar";
 
 function Inventory() {
 
-  const [product, setProduct] =
-    useState("");
-
-  const [stock, setStock] =
-    useState("");
+  const [inventoryData, setInventoryData] =
+    useState([]);
 
   const [search, setSearch] =
     useState("");
 
-  const [inventoryData, setInventoryData] =
-    useState(
-
-      JSON.parse(
-        localStorage.getItem("inventory")
-      ) || []
-    );
-
-  const [editId, setEditId] =
-    useState(null);
-
-  const [editProduct, setEditProduct] =
-    useState("");
-
-  const [editStock, setEditStock] =
-    useState("");
-
   useEffect(() => {
 
-    localStorage.setItem(
+    fetchInventory();
 
-      "inventory",
+  }, []);
 
-      JSON.stringify(inventoryData)
-    );
+  const fetchInventory = async () => {
 
-  }, [inventoryData]);
+    try {
 
-  const addInventory = (e) => {
+      const response =
 
-    e.preventDefault();
+        await axios.get(
+          "http://localhost:5000/api/products"
+        );
 
-    if(
-      product === "" ||
-      stock === ""
-    ){
-      return;
+      setInventoryData(
+        response.data.products
+      );
+
+    } catch(error){
+
+      console.log(
+        "Inventory Error:",
+        error
+      );
     }
-
-    const newItem = {
-
-      id: Date.now(),
-
-      product,
-
-      stock
-    };
-
-    setInventoryData([
-
-      ...inventoryData,
-
-      newItem
-    ]);
-
-    setProduct("");
-
-    setStock("");
   };
 
-  const deleteItem = (id) => {
+  const increaseStock = async (id) => {
 
-    const updatedInventory =
+    try {
 
-      inventoryData.filter(
+      await axios.put(
 
-        (item) =>
-          item.id !== id
-      );
+        `http://localhost:5000/api/inventory/increase/${id}`,
 
-    setInventoryData(updatedInventory);
-  };
-
-  const startEdit = (item) => {
-
-    setEditId(item.id);
-
-    setEditProduct(item.product);
-
-    setEditStock(item.stock);
-  };
-
-  const saveEdit = () => {
-
-    const updatedInventory =
-
-      inventoryData.map((item) =>
-
-        item.id === editId
-        ?
         {
-          ...item,
-
-          product: editProduct,
-
-          stock: editStock
+          quantity: 1
         }
-        :
-        item
       );
 
-    setInventoryData(updatedInventory);
+      fetchInventory();
 
-    setEditId(null);
+    } catch(error){
 
-    setEditProduct("");
+      console.log(error);
+    }
+  };
 
-    setEditStock("");
+  const decreaseStock = async (id) => {
+
+    try {
+
+      await axios.put(
+
+        `http://localhost:5000/api/inventory/decrease/${id}`,
+
+        {
+          quantity: 1
+        }
+      );
+
+      fetchInventory();
+
+    } catch(error){
+
+      alert(
+        error.response?.data?.message ||
+        "Unable to decrease stock"
+      );
+    }
   };
 
   const filteredInventory =
 
     inventoryData.filter((item) =>
 
-      item.product
+      (item.name || "")
       .toLowerCase()
       .includes(
-
         search.toLowerCase()
       )
     );
@@ -160,60 +122,10 @@ function Inventory() {
 
         </h2>
 
-        {/* Add Inventory */}
-
-        <form
-          className="product-form"
-
-          onSubmit={addInventory}
-        >
-
-          <input
-            type="text"
-
-            placeholder="Product Name"
-
-            className="form-control"
-
-            value={product}
-
-            onChange={(e) =>
-              setProduct(
-                e.target.value
-              )
-            }
-          />
-
-          <input
-            type="number"
-
-            placeholder="Stock Quantity"
-
-            className="form-control"
-
-            value={stock}
-
-            onChange={(e) =>
-              setStock(
-                e.target.value
-              )
-            }
-          />
-
-          <button className="btn btn-primary">
-
-            Add Item
-
-          </button>
-
-        </form>
-
-        {/* Search */}
-
         <input
           type="text"
 
-          placeholder="Search Inventory"
+          placeholder="Search Product"
 
           className="form-control search-input"
 
@@ -225,8 +137,6 @@ function Inventory() {
             )
           }
         />
-
-        {/* Inventory Table */}
 
         <div className="inventory-table">
 
@@ -240,11 +150,13 @@ function Inventory() {
 
                 <th>Product</th>
 
+                <th>Price</th>
+
                 <th>Stock</th>
 
                 <th>Status</th>
 
-                <th>Action</th>
+                <th>Actions</th>
 
               </tr>
 
@@ -253,123 +165,114 @@ function Inventory() {
             <tbody>
 
               {
+                filteredInventory.length === 0
+
+                ?
+
+                <tr>
+
+                  <td
+                    colSpan="6"
+                    className="text-center text-muted"
+                  >
+
+                    No Products Available
+
+                  </td>
+
+                </tr>
+
+                :
+
                 filteredInventory.map((item) => (
 
-                  <tr key={item.id}>
+                  <tr key={item._id}>
 
                     <td>
-                      {item.id}
+
+                      {item._id}
+
+                    </td>
+
+                    <td>
+
+                      {item.name}
+
+                    </td>
+
+                    <td>
+
+                      ₹{item.price}
+
+                    </td>
+
+                    <td>
+
+                      {item.stock}
+
                     </td>
 
                     <td>
 
                       {
-                        editId === item.id
+                        item.stock === 0
+
                         ?
-                        <input
-                          type="text"
 
-                          className="form-control"
+                        <span className="badge bg-danger">
 
-                          value={editProduct}
+                          Out Of Stock
 
-                          onChange={(e) =>
-                            setEditProduct(
-                              e.target.value
-                            )
-                          }
-                        />
+                        </span>
+
                         :
-                        item.product
+
+                        item.stock <= 5
+
+                        ?
+
+                        <span className="badge bg-warning text-dark">
+
+                          Low Stock
+
+                        </span>
+
+                        :
+
+                        <span className="badge bg-success">
+
+                          In Stock
+
+                        </span>
                       }
 
                     </td>
 
                     <td>
 
-                      {
-                        editId === item.id
-                        ?
-                        <input
-                          type="number"
-
-                          className="form-control"
-
-                          value={editStock}
-
-                          onChange={(e) =>
-                            setEditStock(
-                              e.target.value
-                            )
-                          }
-                        />
-                        :
-                        item.stock
-                      }
-
-                    </td>
-
-                    <td>
-
-                      <span
-                        className={
-                          item.stock <= 10
-                          ?
-                          "badge bg-danger"
-                          :
-                          "badge bg-success"
+                      <button
+                        className="btn btn-success btn-sm me-2"
+                        onClick={() =>
+                          increaseStock(
+                            item._id
+                          )
                         }
                       >
 
-                        {
-                          item.stock <= 10
-                          ?
-                          "Low Stock"
-                          :
-                          "In Stock"
-                        }
+                        + Stock
 
-                      </span>
-
-                    </td>
-
-                    <td>
-
-                      {
-                        editId === item.id
-                        ?
-                        <button
-                          className="btn btn-success btn-sm me-2"
-
-                          onClick={saveEdit}
-                        >
-
-                          Save
-
-                        </button>
-                        :
-                        <button
-                          className="btn btn-warning btn-sm me-2"
-
-                          onClick={() =>
-                            startEdit(item)
-                          }
-                        >
-
-                          Edit
-
-                        </button>
-                      }
+                      </button>
 
                       <button
                         className="btn btn-danger btn-sm"
-
                         onClick={() =>
-                          deleteItem(item.id)
+                          decreaseStock(
+                            item._id
+                          )
                         }
                       >
 
-                        Delete
+                        - Stock
 
                       </button>
 
