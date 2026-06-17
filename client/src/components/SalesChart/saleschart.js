@@ -1,107 +1,57 @@
 import React from "react";
 
-import "./saleschart.css";
-
 import {
-
-  LineChart,
-  Line,
+  BarChart,
+  Bar,
   XAxis,
   YAxis,
+  CartesianGrid,
   Tooltip,
-  ResponsiveContainer,
-  CartesianGrid
-
+  ResponsiveContainer
 } from "recharts";
 
-function SalesChart() {
+function SalesChart({ orders }) {
 
-  const data = [
-
-    {
-      month: "Jan",
-      sales: 12000
-    },
-
-    {
-      month: "Feb",
-      sales: 18000
-    },
-
-    {
-      month: "Mar",
-      sales: 15000
-    },
-
-    {
-      month: "Apr",
-      sales: 22000
-    },
-
-    {
-      month: "May",
-      sales: 26000
-    },
-
-    {
-      month: "Jun",
-      sales: 30000
-    }
-
-  ];
+  const data = orders.map((order) => ({
+    name: order.customerName,
+    revenue: order.totalAmount
+  }));
 
   return (
 
-    <div className="chart-container">
+    <div
+      style={{
+        width: "100%",
+        height: 350,
+        background: "#fff",
+        padding: "20px",
+        borderRadius: "10px",
+        marginTop: "20px"
+      }}
+    >
 
-      <div className="chart-header">
-
-        <h3>
-          Monthly Sales Analytics
-        </h3>
-
-        <p>
-          Retail POS Performance Overview
-        </p>
-
-      </div>
+      <h3>Sales Statistics</h3>
 
       <ResponsiveContainer
         width="100%"
-        height={350}
+        height={300}
       >
 
-        <LineChart
-          data={data}
-        >
+        <BarChart data={data}>
 
-          <CartesianGrid
-            strokeDasharray="3 3"
-          />
+          <CartesianGrid strokeDasharray="3 3" />
 
-          <XAxis
-            dataKey="month"
-          />
+          <XAxis dataKey="name" />
 
           <YAxis />
 
           <Tooltip />
 
-          <Line
-            type="monotone"
-
-            dataKey="sales"
-
-            stroke="#2563eb"
-
-            strokeWidth={4}
-
-            activeDot={{
-              r: 8
-            }}
+          <Bar
+            dataKey="revenue"
           />
 
-        </LineChart>
+        </BarChart>
 
       </ResponsiveContainer>
 

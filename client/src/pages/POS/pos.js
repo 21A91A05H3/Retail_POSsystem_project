@@ -24,6 +24,9 @@ function POS() {
   const [cart, setCart] =
     useState([]);
 
+  const [completedOrder, setCompletedOrder] =
+    useState(null);
+
   useEffect(() => {
 
     fetchProducts();
@@ -72,7 +75,7 @@ function POS() {
           {
             ...item,
             quantity:
-              item.quantity + 1
+            item.quantity + 1
           }
 
           :
@@ -140,19 +143,22 @@ function POS() {
             item.price
         }));
 
+      const orderData = {
+
+        customerName:
+          "Walk-in Customer",
+
+        products:
+          productsData,
+
+        totalAmount
+      };
+
       await axios.post(
 
         "http://localhost:5000/api/orders",
 
-        {
-          customerName:
-            "Walk-in Customer",
-
-          products:
-            productsData,
-
-          totalAmount
-        }
+        orderData
       );
 
       for(const item of cart){
@@ -168,13 +174,20 @@ function POS() {
         );
       }
 
-      alert(
-        "Order Placed Successfully"
-      );
+      setCompletedOrder({
+
+        cart: [...cart],
+
+        totalAmount
+      });
 
       setCart([]);
 
       fetchProducts();
+
+      alert(
+        "Order Placed Successfully"
+      );
 
     } catch(error){
 
@@ -379,11 +392,15 @@ function POS() {
         </div>
 
         {
-          cart.length > 0 && (
+          completedOrder && (
 
             <Invoice
-              cart={cart}
-              totalAmount={totalAmount}
+              cart={
+                completedOrder.cart
+              }
+              totalAmount={
+                completedOrder.totalAmount
+              }
             />
           )
         }

@@ -27,6 +27,9 @@ function Dashboard() {
   const [lowStockProducts, setLowStockProducts] =
     useState(0);
 
+  const [totalCustomers, setTotalCustomers] =
+    useState(0);
+
   useEffect(() => {
 
     fetchDashboardData();
@@ -55,6 +58,12 @@ function Dashboard() {
           "http://localhost:5000/api/products/low-stock"
         );
 
+      const users =
+
+        await axios.get(
+          "http://localhost:5000/api/auth/users"
+        );
+
       setTotalRevenue(
         analytics.data.totalRevenue
       );
@@ -71,9 +80,16 @@ function Dashboard() {
         lowStock.data.count
       );
 
+      setTotalCustomers(
+        users.data.users.length
+      );
+
     } catch(error){
 
-      console.log(error);
+      console.log(
+        "Dashboard Error:",
+        error
+      );
     }
   };
 
@@ -104,7 +120,7 @@ function Dashboard() {
 
         </div>
 
-        <div className="row">
+        <div className="row g-4">
 
           <div className="col-md-3">
 
@@ -172,6 +188,26 @@ function Dashboard() {
 
               <h5>
 
+                Customers
+
+              </h5>
+
+              <h2>
+
+                {totalCustomers}
+
+              </h2>
+
+            </div>
+
+          </div>
+
+          <div className="col-md-3 mt-4">
+
+            <div className="card p-3 shadow">
+
+              <h5>
+
                 Low Stock
 
               </h5>
@@ -188,7 +224,7 @@ function Dashboard() {
 
         </div>
 
-        <footer className="footer mt-5">
+        <footer className="footer mt-10">
 
           © 2026 Retail POS System
 
