@@ -20,30 +20,18 @@ function Home() {
 
   useEffect(() => {
 
-  fetchProducts();
-
-  const interval = setInterval(() => {
-
     fetchProducts();
 
-  }, 3000);
+    const interval = setInterval(() => {
 
-  return () => clearInterval(interval);
+      fetchProducts();
 
-}, []);
-   useEffect(() => {
+    }, 3000);
 
-  fetchProducts();
+    return () => clearInterval(interval);
 
-  const interval = setInterval(() => {
+  }, []);
 
-    fetchProducts();
-
-  }, 3000);
-
-  return () => clearInterval(interval);
-
-}, []);
   const fetchProducts = async () => {
 
     try {
@@ -224,25 +212,41 @@ function Home() {
 
                     </p>
 
-                    {
-                      product.stock === 0 ? (
+                    <p>
 
-                        <p className="out-stock">
+                      {
+                        product.stock === 0
 
-                          Out Of Stock ❌
+                        ?
 
-                        </p>
+                        <span className="out-stock-badge">
 
-                      ) : product.stock <= 5 ? (
+                          Out Of Stock
 
-                        <p className="low-stock">
+                        </span>
 
-                          Low Stock ⚠️
+                        :
 
-                        </p>
+                        product.stock <= 5
 
-                      ) : null
-                    }
+                        ?
+
+                        <span className="low-stock-badge">
+
+                          Low Stock
+
+                        </span>
+
+                        :
+
+                        <span className="in-stock-badge">
+
+                          In Stock
+
+                        </span>
+                      }
+
+                    </p>
 
                     <button
                       className={
@@ -250,11 +254,11 @@ function Home() {
 
                         ?
 
-                        "btn btn-secondary"
+                        "btn btn-secondary w-100"
 
                         :
 
-                        "btn btn-primary"
+                        "btn btn-primary w-100"
                       }
 
                       disabled={

@@ -83,6 +83,8 @@
 
 .product-card{
 
+  height: 420px;
+
   border: none;
 
   border-radius: 15px;
@@ -113,6 +115,8 @@
 .product-card h5{
 
   font-weight: 600;
+
+  min-height: 50px;
 }
 
 .product-card p{
@@ -127,18 +131,51 @@
   border-radius: 10px;
 
   font-weight: 600;
+
+  margin-top: 10px;
 }
 
-.low-stock{
+.in-stock-badge{
 
-  color: orange;
+  background: #16a34a;
 
-  font-weight: bold;
+  color: white;
+
+  padding: 5px 12px;
+
+  border-radius: 20px;
+
+  font-size: 12px;
+
+  font-weight: 600;
 }
 
-.out-stock{
+.low-stock-badge{
 
-  color: red;
+  background: #f59e0b;
 
-  font-weight: bold;
+  color: white;
+
+  padding: 5px 12px;
+
+  border-radius: 20px;
+
+  font-size: 12px;
+
+  font-weight: 600;
+}
+
+.out-stock-badge{
+
+  background: #dc2626;
+
+  color: white;
+
+  padding: 5px 12px;
+
+  border-radius: 20px;
+
+  font-size: 12px;
+
+  font-weight: 600;
 }
