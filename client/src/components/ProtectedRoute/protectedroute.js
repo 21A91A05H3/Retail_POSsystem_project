@@ -1,20 +1,17 @@
 import React from "react";
-
-import {
-  Navigate
-} from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 function ProtectedRoute({ children }) {
 
   const isLoggedIn =
-    localStorage.getItem(
-      "isLoggedIn"
-    );
+  localStorage.getItem(
+    "adminLoggedIn"
+  );
 
-  if(!isLoggedIn){
+if (isLoggedIn !== "true") {
 
-    return <Navigate to="/" />;
-  }
+  return <Navigate to="/" />;
+}
 
   return children;
 }

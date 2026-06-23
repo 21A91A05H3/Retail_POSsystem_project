@@ -17,9 +17,11 @@ function Navbar() {
 
   const handleLogout = () => {
 
-  localStorage.clear();
+  localStorage.removeItem(
+  "adminLoggedIn"
+);
 
-  navigate("/");
+navigate("/");
 };
 
   return (

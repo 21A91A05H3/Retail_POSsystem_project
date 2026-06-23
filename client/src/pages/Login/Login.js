@@ -27,15 +27,15 @@ function Login() {
   const [errors, setErrors] =
     useState({});
 
-  const isLoggedIn =
-    localStorage.getItem(
-      "isLoggedIn"
-    );
+ const isLoggedIn =
+  localStorage.getItem(
+    "adminLoggedIn"
+  );
 
-  if(isLoggedIn){
+if(isLoggedIn === "true"){
 
-    return <Navigate to="/dashboard" />;
-  }
+  return <Navigate to="/dashboard" />;
+}
 
   const handleLogin = (e) => {
 
@@ -80,8 +80,8 @@ function Login() {
 
         localStorage.setItem(
 
-          "isLoggedIn",
-          true
+          "adminLoggedIn",
+          "true"
         );
 
         toast.success(
