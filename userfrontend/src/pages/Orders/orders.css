@@ -4,7 +4,7 @@
 
   min-height: 100vh;
 
-  background: #f8f9fa;
+  background: #f8fafc;
 }
 
 .orders-title{
@@ -14,15 +14,49 @@
   margin-bottom: 30px;
 
   font-weight: 700;
-
-  color: #333;
 }
 
-.no-orders{
+.order-stats{
+
+  display: flex;
+
+  gap: 20px;
+
+  justify-content: center;
+
+  margin-bottom: 30px;
+}
+
+.stat-card{
+
+  background: white;
+
+  padding: 20px;
+
+  border-radius: 15px;
+
+  width: 220px;
 
   text-align: center;
 
-  color: gray;
+  box-shadow:
+    0 4px 12px rgba(0,0,0,0.08);
+}
+
+.stat-card h3{
+
+  color: #2563eb;
+
+  margin-bottom: 5px;
+}
+
+.empty-orders{
+
+  text-align: center;
+
+  margin-top: 80px;
+
+  color: #666;
 }
 
 .order-card{
@@ -36,44 +70,55 @@
   border-radius: 15px;
 
   box-shadow:
-    0 4px 12px rgba(
-      0,
-      0,
-      0,
-      0.08
-    );
+    0 4px 12px rgba(0,0,0,0.08);
 
-  transition: 0.3s ease;
+  transition: 0.3s;
 }
 
 .order-card:hover{
 
-  transform:
-    translateY(-4px);
+  transform: translateY(-5px);
 
   box-shadow:
-    0 8px 20px rgba(
-      0,
-      0,
-      0,
-      0.12
-    );
+    0 8px 20px rgba(0,0,0,0.12);
+}
+
+.order-header{
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 15px;
 }
 
 .order-id{
 
-  color: #0d6efd;
-
-  margin-bottom: 15px;
-
-  word-break: break-all;
+  color: #2563eb;
 }
 
-.status{
+.status-badge{
 
-  color: green;
+  background: #16a34a;
+
+  color: white;
+
+  padding: 6px 12px;
+
+  border-radius: 20px;
+
+  font-size: 12px;
 
   font-weight: 600;
+}
+
+.order-total{
+
+  color: #16a34a;
+
+  margin: 15px 0;
 }
 
 .products-list{
@@ -86,6 +131,4 @@
 .products-list li{
 
   margin-bottom: 8px;
-
-  color: #444;
 }

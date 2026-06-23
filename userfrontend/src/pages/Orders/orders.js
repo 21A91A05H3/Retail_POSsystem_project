@@ -47,9 +47,7 @@ function Orders() {
             loggedInUser
         );
 
-      setOrders(
-        filteredOrders
-      );
+      setOrders(filteredOrders);
 
     } catch(error){
 
@@ -59,6 +57,17 @@ function Orders() {
       );
     }
   };
+
+  const totalSpent =
+
+    orders.reduce(
+
+      (total, order) =>
+
+        total + order.totalAmount,
+
+      0
+    );
 
   return (
 
@@ -75,15 +84,62 @@ function Orders() {
         </h2>
 
         {
+          orders.length > 0 && (
+
+            <div className="order-stats">
+
+              <div className="stat-card">
+
+                <h3>
+                  {orders.length}
+                </h3>
+
+                <p>
+                  Total Orders
+                </p>
+
+              </div>
+
+              <div className="stat-card">
+
+                <h3>
+                  ₹{totalSpent}
+                </h3>
+
+                <p>
+                  Total Spent
+                </p>
+
+              </div>
+
+            </div>
+          )
+        }
+
+        {
           orders.length === 0
 
           ?
 
-          <h4 className="no-orders">
+          <div className="empty-orders">
 
-            No Orders Found
+            <h1>
+              📦
+            </h1>
 
-          </h4>
+            <h4>
+
+              No Orders Yet
+
+            </h4>
+
+            <p>
+
+              Start shopping to see your orders here.
+
+            </p>
+
+          </div>
 
           :
 
@@ -94,13 +150,22 @@ function Orders() {
               key={order._id}
             >
 
-              <h5 className="order-id">
+              <div className="order-header">
 
-                Order ID:
-                {" "}
-                {order._id}
+                <h5 className="order-id">
 
-              </h5>
+                  Order #
+                  {order._id.slice(-6)}
+
+                </h5>
+
+                <span className="status-badge">
+
+                  Delivered ✅
+
+                </span>
+
+              </div>
 
               <p>
 
@@ -109,16 +174,6 @@ function Orders() {
                 </strong>
                 {" "}
                 {order.customerName}
-
-              </p>
-
-              <p>
-
-                <strong>
-                  Total:
-                </strong>
-                {" "}
-                ₹{order.totalAmount}
 
               </p>
 
@@ -150,13 +205,21 @@ function Orders() {
 
               </p>
 
-              <p className="status">
+              <p>
 
-                Status:
+                <strong>
+                  Items:
+                </strong>
                 {" "}
-                Placed ✅
+                {order.products.length}
 
               </p>
+
+              <h4 className="order-total">
+
+                ₹{order.totalAmount}
+
+              </h4>
 
               <h6>
 
@@ -178,7 +241,7 @@ function Orders() {
                           {product.productName}
                         </strong>
 
-                        {" | Qty: "}
+                        {" × "}
 
                         {product.quantity}
 

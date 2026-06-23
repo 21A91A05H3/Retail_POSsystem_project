@@ -17,7 +17,8 @@ function Cart() {
 
   const [showModal, setShowModal] =
     useState(false);
-
+const navigate =
+  useNavigate();
   useEffect(() => {
 
     const storedCart =
@@ -404,17 +405,18 @@ function Cart() {
 
                 </p>
 
-                <button
-                  className="btn btn-primary"
+              <button
+  className="btn btn-primary"
 
-                  onClick={() =>
-                    setShowModal(false)
-                  }
-                >
+  onClick={() => {
 
-                  OK
+    setShowModal(false);
 
-                </button>
+    navigate("/orders");
+  }}
+>
+  View Orders
+</button>
 
               </div>
 

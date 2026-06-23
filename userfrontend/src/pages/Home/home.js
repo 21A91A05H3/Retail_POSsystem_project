@@ -10,6 +10,9 @@ import "./home.css";
 import Navbar
 from "../../components/Navbar/navbar";
 
+import { toast }
+from "react-toastify";
+
 function Home() {
 
   const [products, setProducts] =
@@ -18,9 +21,20 @@ function Home() {
   const [cart, setCart] =
     useState([]);
 
+  const [search, setSearch] =
+    useState("");
+
   useEffect(() => {
 
     fetchProducts();
+
+    const storedCart =
+
+      JSON.parse(
+        localStorage.getItem("cart")
+      ) || [];
+
+    setCart(storedCart);
 
     const interval = setInterval(() => {
 
@@ -79,7 +93,7 @@ function Home() {
           {
             ...item,
             quantity:
-            item.quantity + 1
+              item.quantity + 1
           }
 
           :
@@ -109,10 +123,21 @@ function Home() {
       JSON.stringify(updatedCart)
     );
 
-    alert(
+    toast.success(
       `${product.name} added to cart`
     );
   };
+
+  const filteredProducts =
+
+    products.filter((product) =>
+
+      product.name
+      .toLowerCase()
+      .includes(
+        search.toLowerCase()
+      )
+    );
 
   return (
 
@@ -150,10 +175,26 @@ function Home() {
 
         </h2>
 
+        <input
+          type="text"
+
+          className="form-control mb-4"
+
+          placeholder="Search Products..."
+
+          value={search}
+
+          onChange={(e) =>
+            setSearch(
+              e.target.value
+            )
+          }
+        />
+
         <div className="row">
 
           {
-            products.length === 0
+            filteredProducts.length === 0
 
             ?
 
@@ -165,7 +206,7 @@ function Home() {
 
             :
 
-            products.map((product) => (
+            filteredProducts.map((product) => (
 
               <div
                 className="col-md-3 mb-4"
@@ -295,6 +336,34 @@ function Home() {
         </div>
 
       </div>
+
+      <footer className="footer">
+
+        <h5>
+
+          Retail Shop
+
+        </h5>
+
+        <p>
+
+          Fresh Products Delivered To Your Doorstep
+
+        </p>
+
+        <p>
+
+          support@retailshop.com
+
+        </p>
+
+        <p>
+
+          © 2026 Retail Shop
+
+        </p>
+
+      </footer>
 
     </div>
   );
