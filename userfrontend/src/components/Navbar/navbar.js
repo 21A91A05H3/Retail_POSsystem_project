@@ -15,52 +15,37 @@ import {
 
 function Navbar() {
 
-  const navigate =
-    useNavigate();
+  const navigate = useNavigate();
 
   const isLoggedIn =
-    localStorage.getItem(
-      "isLoggedIn"
-    );
+    localStorage.getItem("isLoggedIn");
 
   const loggedInUser =
-    localStorage.getItem(
-      "loggedInUser"
-    );
+    localStorage.getItem("loggedInUser");
+
+  const cartItems =
+    JSON.parse(
+      localStorage.getItem("cart")
+    ) || [];
+
+  const cartCount = cartItems.reduce(
+    (total, item) => total + item.quantity,
+    0
+  );
 
   const handleLogout = () => {
 
-    const confirmLogout =
-
+    if (
       window.confirm(
         "Are you sure you want to logout?"
-      );
+      )
+    ) {
 
-    if(confirmLogout){
-
-      localStorage.removeItem(
-        "isLoggedIn"
-      );
-
-      localStorage.removeItem(
-        "loggedInUser"
-      );
-
-      localStorage.removeItem(
-        "token"
-      );
-
-      localStorage.removeItem(
-        "userData"
-      );
-
-      localStorage.removeItem(
-        "cart"
-      );
-
-      alert(
-        "Logged Out Successfully"
-      );
+      localStorage.removeItem("isLoggedIn");
+      localStorage.removeItem("loggedInUser");
+      localStorage.removeItem("token");
+      localStorage.removeItem("userData");
+      localStorage.removeItem("cart");
 
       navigate("/login");
     }
@@ -70,110 +55,64 @@ function Navbar() {
 
     <nav className="custom-navbar">
 
-      <h2 className="logo">
-
-        Retail Shop
-
+      <h2
+        className="logo"
+        onClick={() => navigate("/home")}
+        style={{ cursor: "pointer" }}
+      >
+        🛒 Retail Shop
       </h2>
 
       <ul className="nav-links">
 
         <li>
-
-          <Link to="/home">
-
-            Home
-
-          </Link>
-
+          <Link to="/home">Home</Link>
         </li>
 
-        {
-          isLoggedIn && (
+        {isLoggedIn && (
+          <li>
+            <Link to="/orders">
+              Orders
+            </Link>
+          </li>
+        )}
 
-            <li>
-
-              <Link to="/orders">
-
-                Orders
-
-              </Link>
-
-            </li>
-          )
-        }
-
-        {
-          isLoggedIn && (
-
-            <li>
-
-              <Link to="/cart">
-
-                <FaShoppingCart />
-
-                {" "}
-
-                Cart
-
-              </Link>
-
-            </li>
-          )
-        }
-
-        {
-          isLoggedIn
-
-          ?
-
-          <>
-
-            <li className="user-name">
-
-              Hi,
-
+        {isLoggedIn && (
+          <li>
+            <Link to="/cart">
+              <FaShoppingCart />
               {" "}
+              Cart ({cartCount})
+            </Link>
+          </li>
+        )}
 
-              {loggedInUser}
-
+        {isLoggedIn ? (
+          <>
+            <li className="user-name">
+              Hi, {loggedInUser} 👋
             </li>
 
             <li>
-
               <button
                 className="logout-btn"
                 onClick={handleLogout}
               >
-
                 <FaSignOutAlt />
-
                 {" "}
-
                 Logout
-
               </button>
-
             </li>
-
           </>
-
-          :
-
+        ) : (
           <li>
-
             <Link to="/login">
-
               <FaUserCircle />
-
               {" "}
-
               Login
-
             </Link>
-
           </li>
-        }
+        )}
 
       </ul>
 

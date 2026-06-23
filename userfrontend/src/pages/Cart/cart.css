@@ -77,3 +77,37 @@
     opacity: 1;
   }
 }
+
+
+.qty-controls{
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  margin-top: 10px;
+}
+
+.qty-controls span{
+
+  font-weight: bold;
+
+  min-width: 20px;
+
+  text-align: center;
+}
+
+.cart-card{
+
+  box-shadow:
+    0 4px 12px rgba(0,0,0,0.08);
+
+  transition: 0.3s;
+}
+
+.cart-card:hover{
+
+  transform: translateY(-3px);
+}

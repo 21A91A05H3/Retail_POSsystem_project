@@ -49,6 +49,78 @@ function Cart() {
     );
   };
 
+  const increaseQty = (id) => {
+
+    const updatedCart =
+
+      cartItems.map((item) =>
+
+        item._id === id
+
+        ?
+
+        {
+          ...item,
+          quantity:
+            item.quantity + 1
+        }
+
+        :
+
+        item
+      );
+
+    setCartItems(updatedCart);
+
+    localStorage.setItem(
+
+      "cart",
+
+      JSON.stringify(updatedCart)
+    );
+  };
+
+  const decreaseQty = (id) => {
+
+    const updatedCart =
+
+      cartItems.map((item) =>
+
+        item._id === id
+
+        ?
+
+        {
+          ...item,
+
+          quantity:
+
+            item.quantity > 1
+
+            ?
+
+            item.quantity - 1
+
+            :
+
+            1
+        }
+
+        :
+
+        item
+      );
+
+    setCartItems(updatedCart);
+
+    localStorage.setItem(
+
+      "cart",
+
+      JSON.stringify(updatedCart)
+    );
+  };
+
   const totalAmount =
 
     cartItems.reduce(
@@ -61,6 +133,14 @@ function Cart() {
 
       0
     );
+
+  const gst =
+
+    totalAmount * 0.18;
+
+  const finalAmount =
+
+    totalAmount + gst;
 
   const handleCheckout = async () => {
 
@@ -93,7 +173,8 @@ function Cart() {
         {
           customerName,
           products,
-          totalAmount
+          totalAmount:
+            finalAmount
         }
       );
 
@@ -137,88 +218,171 @@ function Cart() {
 
           ?
 
-          <h4 className="text-center">
+          <div className="text-center">
 
-            Cart is Empty
+            <h1>
 
-          </h4>
+              🛒
+
+            </h1>
+
+            <h4>
+
+              Your Cart Is Empty
+
+            </h4>
+
+            <p>
+
+              Start Shopping Now
+
+            </p>
+
+          </div>
 
           :
 
-          cartItems.map((item) => (
+          <>
+            {
+              cartItems.map((item) => (
 
-            <div
-              className="cart-card"
-              key={item._id}
-            >
+                <div
+                  className="cart-card"
+                  key={item._id}
+                >
 
-              <div>
+                  <div>
 
-                <h5>
+                    <h5>
 
-                  {item.name}
+                      {item.name}
 
-                </h5>
+                    </h5>
 
-                <p>
+                    <p>
 
-                  ₹{item.price}
+                      ₹{item.price}
 
-                </p>
+                    </p>
 
-                <p>
+                    <div className="qty-controls">
 
-                  Qty:
-                  {" "}
-                  {item.quantity}
+                      <button
+                        className="btn btn-secondary btn-sm"
 
-                </p>
+                        onClick={() =>
+                          decreaseQty(
+                            item._id
+                          )
+                        }
+                      >
 
-              </div>
+                        -
+
+                      </button>
+
+                      <span>
+
+                        {item.quantity}
+
+                      </span>
+
+                      <button
+                        className="btn btn-secondary btn-sm"
+
+                        onClick={() =>
+                          increaseQty(
+                            item._id
+                          )
+                        }
+                      >
+
+                        +
+
+                      </button>
+
+                    </div>
+
+                  </div>
+
+                  <div>
+
+                    <h5>
+
+                      ₹
+                      {
+                        item.price *
+                        item.quantity
+                      }
+
+                    </h5>
+
+                    <button
+                      className="btn btn-danger"
+
+                      onClick={() =>
+                        removeItem(
+                          item._id
+                        )
+                      }
+                    >
+
+                      Remove
+
+                    </button>
+
+                  </div>
+
+                </div>
+              ))
+            }
+
+            <hr />
+
+            <div className="cart-summary">
+
+              <h4>
+
+                Cart Summary
+
+              </h4>
+
+              <p>
+
+                Subtotal:
+                ₹{totalAmount.toFixed(2)}
+
+              </p>
+
+              <p>
+
+                GST (18%):
+                ₹{gst.toFixed(2)}
+
+              </p>
+
+              <h3>
+
+                Total:
+                ₹{finalAmount.toFixed(2)}
+
+              </h3>
 
               <button
-                className="btn btn-danger"
+                className="btn btn-success w-100 mt-3"
 
-                onClick={() =>
-                  removeItem(
-                    item._id
-                  )
+                onClick={
+                  handleCheckout
                 }
               >
 
-                Remove
+                Checkout
 
               </button>
 
             </div>
-          ))
-        }
 
-        <hr />
-
-        <h3>
-
-          Total:
-          {" "}
-          ₹{totalAmount}
-
-        </h3>
-
-        {
-          cartItems.length > 0 && (
-
-            <button
-              className="btn btn-success mt-3"
-
-              onClick={
-                handleCheckout
-              }
-            >
-
-              Checkout
-
-            </button>
-          )
+          </>
         }
 
         {
