@@ -123,9 +123,9 @@ function Home() {
       JSON.stringify(updatedCart)
     );
 
-    toast.success(
-      `${product.name} added to cart`
-    );
+   toast.success(
+  `${product.name} added to cart`
+);
   };
 
   const filteredProducts =
@@ -381,3 +381,4 @@ function Home() {
 }
 
 export default Home;
+

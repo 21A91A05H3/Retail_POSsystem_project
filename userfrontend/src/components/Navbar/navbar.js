@@ -1,7 +1,7 @@
 import React from "react";
 
 import "./navbar.css";
-
+import { toast } from "react-toastify";
 import {
   Link,
   useNavigate
@@ -46,7 +46,7 @@ function Navbar() {
       localStorage.removeItem("token");
       localStorage.removeItem("userData");
       localStorage.removeItem("cart");
-
+        
       navigate("/login");
     }
   };
