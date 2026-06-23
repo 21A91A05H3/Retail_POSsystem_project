@@ -80,7 +80,7 @@ function Navbar() {
 
         <li>
 
-          <Link to="/">
+          <Link to="/home">
 
             Home
 

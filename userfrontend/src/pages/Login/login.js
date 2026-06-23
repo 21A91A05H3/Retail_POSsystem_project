@@ -120,7 +120,7 @@ function Login() {
           "Login Successful"
         );
 
-        navigate("/");
+        navigate("/home");
 
       }
 

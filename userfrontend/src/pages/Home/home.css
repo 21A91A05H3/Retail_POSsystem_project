@@ -10,44 +10,123 @@
 
   align-items: center;
 
-  background: linear-gradient(
-    to right,
-    #2563eb,
-    #1e3a8a
-  );
+  text-align: center;
+
+  background:
+  linear-gradient(
+    rgba(37,99,235,0.8),
+    rgba(30,58,138,0.8)
+  ),
+  url("https://images.unsplash.com/photo-1542838132-92c53300491e");
+
+  background-size: cover;
+
+  background-position: center;
 
   color: white;
 
-  text-align: center;
+  padding: 20px;
 }
 
 .hero-section h1{
 
-  font-size: 60px;
+  font-size: 65px;
+
+  font-weight: bold;
 
   margin-bottom: 20px;
+
+  text-shadow:
+  2px 2px 10px rgba(0,0,0,0.3);
 }
 
 .hero-section p{
 
   font-size: 24px;
 
-  margin-bottom: 25px;
+  margin-bottom: 30px;
+
+  max-width: 700px;
 }
 
-.products-section{
+.hero-section button{
 
-  padding: 60px 20px;
-}
+  padding: 12px 30px;
 
-.product-card{
+  border-radius: 30px;
+
+  font-size: 18px;
+
+  font-weight: 600;
 
   transition: 0.3s;
 }
 
+.hero-section button:hover{
+
+  transform: scale(1.05);
+}
+
+.products-section{
+
+  padding: 70px 20px;
+
+  background: #f8fafc;
+}
+
+.products-section h2{
+
+  font-weight: bold;
+
+  margin-bottom: 40px;
+}
+
+.product-card{
+
+  border: none;
+
+  border-radius: 15px;
+
+  overflow: hidden;
+
+  transition: all 0.3s ease;
+
+  box-shadow:
+  0 4px 15px rgba(0,0,0,0.08);
+}
+
 .product-card:hover{
 
-  transform: translateY(-5px);
+  transform: translateY(-8px);
+
+  box-shadow:
+  0 8px 25px rgba(0,0,0,0.15);
+}
+
+.product-card img{
+
+  border-radius: 10px;
+
+  padding: 10px;
+}
+
+.product-card h5{
+
+  font-weight: 600;
+}
+
+.product-card p{
+
+  margin-bottom: 8px;
+}
+
+.product-card button{
+
+  width: 100%;
+
+  border-radius: 10px;
+
+  font-weight: 600;
 }
 
 .low-stock{
@@ -55,8 +134,6 @@
   color: orange;
 
   font-weight: bold;
-
-  margin-bottom: 10px;
 }
 
 .out-stock{
@@ -64,20 +141,4 @@
   color: red;
 
   font-weight: bold;
-
-  margin-bottom: 10px;
-}
-
-.product-card{
-
-  transition: 0.3s;
-}
-
-.product-card:hover{
-
-  transform: translateY(-5px);
-
-  box-shadow:
-    0px 4px 12px
-    rgba(0,0,0,0.15);
 }
