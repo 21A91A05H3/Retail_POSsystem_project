@@ -159,11 +159,22 @@ function Home() {
 
         </p>
 
-        <button className="btn btn-warning">
+        <button
+  className="btn btn-warning"
 
-          Shop Now
+  onClick={() => {
 
-        </button>
+    document
+      .querySelector(".products-section")
+      ?.scrollIntoView({
+        behavior: "smooth"
+      });
+  }}
+>
+
+  Shop Now
+
+</button>
 
       </div>
 
