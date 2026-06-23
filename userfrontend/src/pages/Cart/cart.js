@@ -5,6 +5,10 @@ import React, {
 
 import axios from "axios";
 
+import {
+  useNavigate
+} from "react-router-dom";
+
 import "./cart.css";
 
 import Navbar
@@ -12,13 +16,15 @@ from "../../components/Navbar/navbar";
 
 function Cart() {
 
+  const navigate =
+    useNavigate();
+
   const [cartItems, setCartItems] =
     useState([]);
 
   const [showModal, setShowModal] =
     useState(false);
-const navigate =
-  useNavigate();
+
   useEffect(() => {
 
     const storedCart =
@@ -195,7 +201,7 @@ const navigate =
       );
 
       alert(
-        "Failed to Place Order"
+        "Failed To Place Order"
       );
     }
   };
@@ -222,9 +228,7 @@ const navigate =
           <div className="text-center">
 
             <h1>
-
               🛒
-
             </h1>
 
             <h4>
@@ -244,6 +248,7 @@ const navigate =
           :
 
           <>
+
             {
               cartItems.map((item) => (
 
@@ -405,18 +410,20 @@ const navigate =
 
                 </p>
 
-              <button
-  className="btn btn-primary"
+                <button
+                  className="btn btn-primary"
 
-  onClick={() => {
+                  onClick={() => {
 
-    setShowModal(false);
+                    setShowModal(false);
 
-    navigate("/orders");
-  }}
->
-  View Orders
-</button>
+                    navigate("/orders");
+                  }}
+                >
+
+                  View Orders
+
+                </button>
 
               </div>
 
