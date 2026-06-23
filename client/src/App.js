@@ -1,15 +1,12 @@
 import React from "react";
 
+import { BrowserRouter, Routes, Route }
+from "react-router-dom";
+
 import { ToastContainer }
 from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
-
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-} from "react-router-dom";
 
 import ProtectedRoute
 from "./components/ProtectedRoute/protectedroute";
@@ -23,9 +20,6 @@ from "./SignUp/signup";
 import Dashboard
 from "./pages/Dashboard/Dashboard";
 
-import POS
-from "./pages/POS/pos";
-
 import Products
 from "./pages/Products/products";
 
@@ -38,6 +32,9 @@ from "./pages/Orders/orders";
 import Customers
 from "./pages/Customers/customers";
 
+import POS
+from "./pages/POS/pos";
+
 function App() {
 
   return (
@@ -46,10 +43,15 @@ function App() {
 
       <Routes>
 
-        {/* Login Page */}
+        {/* Public Routes */}
 
         <Route
           path="/"
+          element={<Login />}
+        />
+
+        <Route
+          path="/login"
           element={<Login />}
         />
 

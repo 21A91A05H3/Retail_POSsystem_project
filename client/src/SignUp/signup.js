@@ -3,16 +3,18 @@ import React, { useState } from "react";
 import "./signup.css";
 
 import {
-
   Link,
-  Navigate
-
+  Navigate,
+  useNavigate
 } from "react-router-dom";
 
 import { toast }
 from "react-toastify";
 
 function Signup() {
+
+  const navigate =
+    useNavigate();
 
   const [name, setName] =
     useState("");
@@ -31,10 +33,10 @@ function Signup() {
 
   const isLoggedIn =
     localStorage.getItem(
-      "isLoggedIn"
+      "adminLoggedIn"
     );
 
-  if(isLoggedIn){
+  if (isLoggedIn === "true") {
 
     return <Navigate to="/dashboard" />;
   }
@@ -45,35 +47,35 @@ function Signup() {
 
     let validationErrors = {};
 
-    if(name === ""){
+    if (name === "") {
 
       validationErrors.name =
         "Full name is required";
     }
 
-    if(email === ""){
+    if (email === "") {
 
       validationErrors.email =
         "Email is required";
     }
 
-    if(password === ""){
+    if (password === "") {
 
       validationErrors.password =
         "Password is required";
     }
-    else if(password.length < 6){
+    else if (password.length < 6) {
 
       validationErrors.password =
         "Password must be at least 6 characters";
     }
 
-    if(confirmPassword === ""){
+    if (confirmPassword === "") {
 
       validationErrors.confirmPassword =
         "Confirm your password";
     }
-    else if(password !== confirmPassword){
+    else if (password !== confirmPassword) {
 
       validationErrors.confirmPassword =
         "Passwords do not match";
@@ -81,9 +83,9 @@ function Signup() {
 
     setErrors(validationErrors);
 
-    if(
+    if (
       Object.keys(validationErrors).length === 0
-    ){
+    ) {
 
       const userData = {
 
@@ -93,9 +95,7 @@ function Signup() {
       };
 
       localStorage.setItem(
-
         "user",
-
         JSON.stringify(userData)
       );
 
@@ -107,6 +107,12 @@ function Signup() {
       setEmail("");
       setPassword("");
       setConfirmPassword("");
+
+      setTimeout(() => {
+
+        navigate("/");
+
+      }, 1500);
     }
   };
 
@@ -132,21 +138,15 @@ function Signup() {
 
             <input
               type="text"
-
               className="form-control"
-
               placeholder="Enter full name"
-
               value={name}
-
               onChange={(e) => {
 
                 setName(e.target.value);
 
                 setErrors({
-
                   ...errors,
-
                   name: ""
                 });
               }}
@@ -168,21 +168,15 @@ function Signup() {
 
             <input
               type="email"
-
               className="form-control"
-
               placeholder="Enter email"
-
               value={email}
-
               onChange={(e) => {
 
                 setEmail(e.target.value);
 
                 setErrors({
-
                   ...errors,
-
                   email: ""
                 });
               }}
@@ -204,21 +198,15 @@ function Signup() {
 
             <input
               type="password"
-
               className="form-control"
-
               placeholder="Enter password"
-
               value={password}
-
               onChange={(e) => {
 
                 setPassword(e.target.value);
 
                 setErrors({
-
                   ...errors,
-
                   password: ""
                 });
               }}
@@ -240,13 +228,9 @@ function Signup() {
 
             <input
               type="password"
-
               className="form-control"
-
               placeholder="Confirm password"
-
               value={confirmPassword}
-
               onChange={(e) => {
 
                 setConfirmPassword(
@@ -254,9 +238,7 @@ function Signup() {
                 );
 
                 setErrors({
-
                   ...errors,
-
                   confirmPassword: ""
                 });
               }}
@@ -270,7 +252,9 @@ function Signup() {
 
           </div>
 
-          <button className="btn btn-success w-100">
+          <button
+            className="btn btn-success w-100"
+          >
 
             Sign Up
 
