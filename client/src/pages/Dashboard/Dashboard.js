@@ -37,7 +37,8 @@ import {
 } from "react-icons/fa";
 
 function Dashboard() {
-
+    const [recentOrders, setRecentOrders] =
+  useState([]);
   const [totalRevenue, setTotalRevenue] =
     useState(0);
 
