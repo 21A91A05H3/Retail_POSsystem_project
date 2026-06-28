@@ -1,13 +1,10 @@
-import React, {
-  useState
-} from "react";
+import React, { useState } from "react";
 
 import axios from "axios";
 
 import "./signup.css";
 
-import Navbar
-from "../../components/Navbar/navbar";
+import Navbar from "../../components/Navbar/navbar";
 
 import {
   useNavigate,
@@ -16,20 +13,23 @@ import {
 
 function Signup() {
 
-  const navigate =
-    useNavigate();
+  const navigate = useNavigate();
 
-  const [formData, setFormData] =
-    useState({
+  const [formData, setFormData] = useState({
 
-      name: "",
-      email: "",
-      password: "",
-      confirmPassword: ""
-    });
+    name: "",
 
-  const [errors, setErrors] =
-    useState({});
+    email: "",
+
+    phone: "",
+
+    password: "",
+
+    confirmPassword: ""
+
+  });
+
+  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
 
@@ -37,8 +37,8 @@ function Signup() {
 
       ...formData,
 
-      [e.target.name]:
-      e.target.value
+      [e.target.name]: e.target.value
+
     });
 
     setErrors({
@@ -46,8 +46,11 @@ function Signup() {
       ...errors,
 
       [e.target.name]: "",
+
       general: ""
+
     });
+
   };
 
   const handleSignup = async (e) => {
@@ -57,133 +60,171 @@ function Signup() {
     let validationErrors = {};
 
     const {
+
       name,
+
       email,
+
+      phone,
+
       password,
+
       confirmPassword
+
     } = formData;
 
-    // Name Validation
-
-    if(!name){
+    if (!name) {
 
       validationErrors.name =
+
         "Name is required";
+
     }
 
-    // Email Validation
-
-    if(!email){
+    if (!email) {
 
       validationErrors.email =
+
         "Email is required";
+
     }
-    else{
+
+    else {
 
       const emailPattern =
 
         /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-      if(
-        !emailPattern.test(email)
-      ){
+      if (!emailPattern.test(email)) {
 
         validationErrors.email =
+
           "Enter valid email";
+
       }
+
     }
 
-    // Password Validation
+    if (!phone) {
 
-    if(!password){
+      validationErrors.phone =
+
+        "Phone number is required";
+
+    }
+
+    else if (!/^[6-9]\d{9}$/.test(phone)) {
+
+      validationErrors.phone =
+
+        "Enter valid 10-digit phone number";
+
+    }
+
+    if (!password) {
 
       validationErrors.password =
+
         "Password is required";
+
     }
-    else if(password.length < 6){
+
+    else if (password.length < 6) {
 
       validationErrors.password =
+
         "Minimum 6 characters required";
+
     }
 
-    // Confirm Password Validation
-
-    if(!confirmPassword){
+    if (!confirmPassword) {
 
       validationErrors.confirmPassword =
+
         "Confirm your password";
+
     }
-    else if(
-      password !== confirmPassword
-    ){
+
+    else if (password !== confirmPassword) {
 
       validationErrors.confirmPassword =
+
         "Passwords do not match";
+
     }
 
     setErrors(validationErrors);
 
-    if(
-      Object.keys(validationErrors)
-      .length > 0
-    ){
+    if (Object.keys(validationErrors).length > 0) {
+
       return;
+
     }
 
     try {
 
-      const response =
+      const response = await axios.post(
 
-        await axios.post(
+        "http://localhost:5000/api/auth/register",
 
-          "http://localhost:5000/api/auth/register",
+        {
 
-          {
-            name,
-            email,
-            password
-          }
-        );
+          name,
 
-      if(
-        response.data.success
-      ){
+          email,
 
-        alert(
-          "Registration Successful"
-        );
+          phone,
+
+          password
+
+        }
+
+      );
+
+      if (response.data.success) {
+
+        alert("Registration Successful");
 
         setFormData({
 
           name: "",
+
           email: "",
+
+          phone: "",
+
           password: "",
+
           confirmPassword: ""
+
         });
 
         navigate("/login");
+
       }
 
-    } catch(error){
+    }
 
-  console.log("Signup Error:", error);
+    catch (error) {
 
-  console.log(
-    "Response:",
-    error.response?.data
-  );
+      console.log("Signup Error:", error);
 
-  setErrors({
+      console.log("Response:", error.response?.data);
 
-    general:
+      setErrors({
 
-      error.response?.data?.message ||
+        general:
 
-      error.message ||
+          error.response?.data?.message ||
 
-      "Registration Failed"
-  });
-}
+          error.message ||
+
+          "Registration Failed"
+
+      });
+
+    }
+
   };
 
   return (
@@ -195,9 +236,11 @@ function Signup() {
       <div className="signup-container">
 
         <form
+
           className="signup-form"
 
           onSubmit={handleSignup}
+
         >
 
           <h2>
@@ -207,17 +250,19 @@ function Signup() {
           </h2>
 
           {
-            errors.general && (
 
-              <p className="error-text">
+            errors.general &&
 
-                {errors.general}
+            <p className="error-text">
 
-              </p>
-            )
+              {errors.general}
+
+            </p>
+
           }
 
           <input
+
             type="text"
 
             name="name"
@@ -229,20 +274,23 @@ function Signup() {
             value={formData.name}
 
             onChange={handleChange}
+
           />
 
           {
-            errors.name && (
 
-              <p className="error-text">
+            errors.name &&
 
-                {errors.name}
+            <p className="error-text">
 
-              </p>
-            )
+              {errors.name}
+
+            </p>
+
           }
 
           <input
+
             type="email"
 
             name="email"
@@ -254,20 +302,51 @@ function Signup() {
             value={formData.email}
 
             onChange={handleChange}
+
           />
 
           {
-            errors.email && (
 
-              <p className="error-text">
+            errors.email &&
 
-                {errors.email}
+            <p className="error-text">
 
-              </p>
-            )
+              {errors.email}
+
+            </p>
+
           }
 
           <input
+
+            type="text"
+
+            name="phone"
+
+            placeholder="Enter Phone Number"
+
+            className="form-control"
+
+            value={formData.phone}
+
+            onChange={handleChange}
+
+          />
+
+          {
+
+            errors.phone &&
+
+            <p className="error-text">
+
+              {errors.phone}
+
+            </p>
+
+          }
+
+          <input
+
             type="password"
 
             name="password"
@@ -279,20 +358,23 @@ function Signup() {
             value={formData.password}
 
             onChange={handleChange}
+
           />
 
           {
-            errors.password && (
 
-              <p className="error-text">
+            errors.password &&
 
-                {errors.password}
+            <p className="error-text">
 
-              </p>
-            )
+              {errors.password}
+
+            </p>
+
           }
 
           <input
+
             type="password"
 
             name="confirmPassword"
@@ -304,17 +386,19 @@ function Signup() {
             value={formData.confirmPassword}
 
             onChange={handleChange}
+
           />
 
           {
-            errors.confirmPassword && (
 
-              <p className="error-text">
+            errors.confirmPassword &&
 
-                {errors.confirmPassword}
+            <p className="error-text">
 
-              </p>
-            )
+              {errors.confirmPassword}
+
+            </p>
+
           }
 
           <button className="btn btn-primary w-100">
@@ -325,9 +409,7 @@ function Signup() {
 
           <p className="text-center">
 
-            Already have account?
-
-            {" "}
+            Already have account?{" "}
 
             <Link to="/login">
 
@@ -342,7 +424,9 @@ function Signup() {
       </div>
 
     </div>
+
   );
+
 }
 
 export default Signup;

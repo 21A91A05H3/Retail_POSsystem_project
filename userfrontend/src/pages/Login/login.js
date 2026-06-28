@@ -20,7 +20,7 @@ function Login() {
   const navigate =
     useNavigate();
 
-  const [email, setEmail] =
+  const [login, setLogin] =
     useState("");
 
   const [password, setPassword] =
@@ -39,7 +39,7 @@ function Login() {
 
     if(token){
 
-      navigate("/");
+      navigate("/home");
 
     }
 
@@ -51,10 +51,10 @@ function Login() {
 
     let validationErrors = {};
 
-    if(!email){
+    if(!login){
 
-      validationErrors.email =
-        "Email is required";
+      validationErrors.login =
+        "Email or Phone Number is required";
     }
 
     if(!password){
@@ -81,7 +81,7 @@ function Login() {
           "http://localhost:5000/api/auth/login",
 
           {
-            email,
+            login,
             password
           }
         );
@@ -112,7 +112,7 @@ function Login() {
           )
         );
 
-        setEmail("");
+        setLogin("");
 
         setPassword("");
 
@@ -173,17 +173,17 @@ function Login() {
           }
 
           <input
-            type="email"
+            type="text"
 
-            placeholder="Enter Email"
+            placeholder="Enter Email or Phone Number"
 
             className="form-control"
 
-            value={email}
+            value={login}
 
             onChange={(e) => {
 
-              setEmail(
+              setLogin(
                 e.target.value
               );
 
@@ -191,7 +191,7 @@ function Login() {
 
                 ...errors,
 
-                email: "",
+                login: "",
 
                 general: ""
               });
@@ -199,11 +199,11 @@ function Login() {
           />
 
           {
-            errors.email && (
+            errors.login && (
 
               <p className="error-text">
 
-                {errors.email}
+                {errors.login}
 
               </p>
             )
