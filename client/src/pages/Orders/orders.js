@@ -31,23 +31,43 @@ function Orders() {
 
     try {
 
-      const response =
+      const response = await axios.get(
 
-        await axios.get(
-          "http://localhost:5000/api/orders"
+        "http://localhost:5000/api/orders"
+
+      );
+      response.data.orders.forEach(order => {
+  console.log(order.customerName, order.orderType);
+});
+
+      const sortedOrders =
+
+        response.data.orders.sort(
+
+          (a, b) =>
+
+            new Date(b.createdAt) -
+
+            new Date(a.createdAt)
+
         );
 
-      setOrders(
-        response.data.orders
-      );
+      setOrders(sortedOrders);
 
-    } catch(error){
+    }
+
+    catch (error) {
 
       console.log(
+
         "Order Fetch Error:",
+
         error
+
       );
+
     }
+
   };
 
   const filteredOrders =
@@ -55,10 +75,15 @@ function Orders() {
     orders.filter((order) =>
 
       (order.customerName || "")
+
         .toLowerCase()
+
         .includes(
+
           search.toLowerCase()
+
         )
+
     );
 
   return (
@@ -88,10 +113,15 @@ function Orders() {
           value={search}
 
           onChange={(e) =>
+
             setSearch(
+
               e.target.value
+
             )
+
           }
+
         />
 
         <div className="orders-table">
@@ -109,7 +139,10 @@ function Orders() {
                 <th>Amount</th>
 
                 <th>Date</th>
+
                 <th>Time</th>
+
+                <th>Order Type</th>
 
                 <th>Status</th>
 
@@ -120,6 +153,7 @@ function Orders() {
             <tbody>
 
               {
+
                 filteredOrders.length === 0
 
                 ?
@@ -127,8 +161,11 @@ function Orders() {
                 <tr>
 
                   <td
-                    colSpan="5"
+
+                    colSpan="7"
+
                     className="text-center text-muted"
+
                   >
 
                     No Orders Available
@@ -139,59 +176,116 @@ function Orders() {
 
                 :
 
-                filteredOrders.map((order) => (
+                filteredOrders.map((order) => {
 
-                  <tr key={order._id}>
+                  const orderType =
 
-                    <td>
+                    order.customerName === "Walk-in Customer"
 
-                    {order._id.slice(-8)}
+                      ? "Offline"
 
-                    </td>
+                      : (
 
-                    <td>
+                          order.orderType === "Offline"
 
-                      {order.customerName}
+                            ? "Offline"
 
-                    </td>
+                            : "Online"
 
-                    <td>
+                        );
 
-                      ₹{order.totalAmount}
+                  return (
 
-                    </td>
+                    <tr key={order._id}>
 
-                    <td>
+                      <td>
 
-                      {
-                        new Date(
-                          order.createdAt
-                        ).toLocaleDateString()
-                      }
+                        {order._id.slice(-8)}
 
-                    </td>
-                    <td>
-  {
-    new Date(
-      order.createdAt
-    ).toLocaleTimeString()
-  }
-</td>
+                      </td>
 
-                    <td>
+                      <td>
 
-                      <span
-                        className="badge bg-success"
-                      >
+                        {order.customerName}
 
-                        Placed
+                      </td>
 
-                      </span>
+                      <td>
 
-                    </td>
+                        ₹{Math.round(order.totalAmount)}
 
-                  </tr>
-                ))
+                      </td>
+
+                      <td>
+
+                        {
+
+                          new Date(
+
+                            order.createdAt
+
+                          ).toLocaleDateString()
+
+                        }
+
+                      </td>
+
+                      <td>
+
+                        {
+
+                          new Date(
+
+                            order.createdAt
+
+                          ).toLocaleTimeString()
+
+                        }
+
+                      </td>
+
+                      <td>
+
+                        {
+
+                          orderType === "Online"
+
+                          ?
+
+                          <span className="badge bg-success">
+
+                            Online
+
+                          </span>
+
+                          :
+
+                          <span className="badge bg-primary">
+
+                            Offline
+
+                          </span>
+
+                        }
+
+                      </td>
+
+                      <td>
+
+                        <span className="badge bg-success">
+
+                          Placed
+
+                        </span>
+
+                      </td>
+
+                    </tr>
+
+                  );
+
+                })
+
               }
 
             </tbody>
@@ -203,7 +297,9 @@ function Orders() {
       </div>
 
     </div>
+
   );
+
 }
 
 export default Orders;

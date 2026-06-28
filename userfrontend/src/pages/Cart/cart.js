@@ -175,15 +175,23 @@ function Cart() {
 
       await axios.post(
 
-        "http://localhost:5000/api/orders",
+  "http://localhost:5000/api/orders",
 
-        {
-          customerName,
-          products,
-          totalAmount:
-            finalAmount
-        }
-      );
+  {
+
+    customerName,
+
+    products,
+
+    totalAmount: finalAmount,
+
+    paymentMethod: "Online",
+
+    orderType: "Online"
+
+  }
+
+);
 
       localStorage.removeItem(
         "cart"

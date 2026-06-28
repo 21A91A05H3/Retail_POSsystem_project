@@ -1,6 +1,9 @@
 import orderModel from "../models/orderModel.js";
 
+// ======================================
 // CREATE ORDER
+// ======================================
+
 export const createOrder = async (
   req,
   res
@@ -14,15 +17,31 @@ export const createOrder = async (
     );
 
     const {
+
       customerName,
+
       products,
+
       totalAmount,
+
+      paymentMethod,
+
+      orderType
+
     } = req.body;
 
     const order = await orderModel.create({
+
       customerName,
+
       products,
+
       totalAmount,
+
+      paymentMethod,
+
+      orderType
+
     });
 
     console.log(
@@ -31,12 +50,18 @@ export const createOrder = async (
     );
 
     res.status(201).json({
+
       success: true,
+
       message: "Order Created Successfully",
+
       order,
+
     });
 
-  } catch (error) {
+  }
+
+  catch (error) {
 
     console.log(
       "Order Error:",
@@ -44,14 +69,21 @@ export const createOrder = async (
     );
 
     res.status(500).json({
+
       success: false,
+
       message: error.message,
+
     });
 
   }
+
 };
 
+// ======================================
 // GET ALL ORDERS
+// ======================================
+
 export const getOrders = async (
   req,
   res
@@ -59,25 +91,40 @@ export const getOrders = async (
 
   try {
 
-    const orders = await orderModel.find();
+    const orders = await orderModel
+      .find()
+      .sort({ createdAt: -1 });
 
     res.status(200).json({
+
       success: true,
+
       count: orders.length,
+
       orders,
-    });
 
-  } catch (error) {
-
-    res.status(500).json({
-      success: false,
-      message: error.message,
     });
 
   }
+
+  catch (error) {
+
+    res.status(500).json({
+
+      success: false,
+
+      message: error.message,
+
+    });
+
+  }
+
 };
 
+// ======================================
 // SALES ANALYTICS
+// ======================================
+
 export const getSalesAnalytics = async (
   req,
   res
@@ -88,25 +135,39 @@ export const getSalesAnalytics = async (
     const orders = await orderModel.find();
 
     const totalRevenue = orders.reduce(
+
       (acc, item) =>
+
         acc + item.totalAmount,
+
       0
+
     );
 
     const totalOrders = orders.length;
 
     res.status(200).json({
+
       success: true,
+
       totalRevenue,
+
       totalOrders,
-    });
 
-  } catch (error) {
-
-    res.status(500).json({
-      success: false,
-      message: error.message,
     });
 
   }
+
+  catch (error) {
+
+    res.status(500).json({
+
+      success: false,
+
+      message: error.message,
+
+    });
+
+  }
+
 };

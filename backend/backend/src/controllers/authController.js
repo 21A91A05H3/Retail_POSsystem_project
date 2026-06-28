@@ -17,17 +17,21 @@ export const registerUser = async (req, res) => {
       role
     } = req.body;
 
-    // Check Existing User
-    const existingUser =
-      await userModel.findOne({
-         $or:[
+    const existingUser = await userModel.findOne({
 
-        {email},
+      $or: [
 
-        {phone}
+        {
+          email: email.trim().toLowerCase()
+        },
 
-    ]
-      });
+        {
+          phone: phone.trim()
+        }
+
+      ]
+
+    });
 
     if (existingUser) {
 
@@ -35,49 +39,51 @@ export const registerUser = async (req, res) => {
 
         success: false,
 
-        message: "User already exists",
+        message: "User already exists"
+
       });
+
     }
 
-    // Hash Password
-    const hashedPassword =
-      await bcrypt.hash(
-        password,
-        10
-      );
+    const hashedPassword = await bcrypt.hash(
+      password,
+      10
+    );
 
-    // Create User
-    const user =
-      await userModel.create({
+    const user = await userModel.create({
 
-        name,
+      name,
 
-        email,
+      email: email.trim().toLowerCase(),
 
-        phone,
+      phone: phone.trim(),
 
-        password: hashedPassword,
+      password: hashedPassword,
 
-        role: role || "cashier",
-      });
+      role: role || "cashier"
+
+    });
 
     res.status(201).json({
 
       success: true,
 
-      message:
-        "User Registered Successfully",
+      message: "User Registered Successfully",
 
-      user,
+      user
+
     });
 
-  } catch (error) {
+  }
+
+  catch (error) {
 
     res.status(500).json({
 
       success: false,
 
-      message: error.message,
+      message: error.message
+
     });
 
   }
@@ -91,30 +97,35 @@ export const loginUser = async (req, res) => {
 
   try {
 
-    const {
+    let {
+
       login,
+
       password
+
     } = req.body;
 
-    // Check User
-    const user =
-      await userModel.findOne({
-        $or:[
+    login = login.trim().toLowerCase();
 
-{
+    console.log("Searching:", login);
 
-email:login
+    const user = await userModel.findOne({
 
-},
+      $or: [
 
-{
+        {
+          email: login
+        },
 
-phone:login
+        {
+          phone: login
+        }
 
-}
+      ]
 
-]
-      });
+    });
+
+    console.log("User Found:", user);
 
     if (!user) {
 
@@ -122,17 +133,19 @@ phone:login
 
         success: false,
 
-        message:
-          "Invalid Email or Password",
+        message: "Invalid Email or Password"
+
       });
+
     }
 
-    // Compare Password
-    const isMatch =
-      await bcrypt.compare(
-        password,
-        user.password
-      );
+    const isMatch = await bcrypt.compare(
+
+      password,
+
+      user.password
+
+    );
 
     if (!isMatch) {
 
@@ -140,44 +153,52 @@ phone:login
 
         success: false,
 
-        message:
-          "Invalid Email or Password",
+        message: "Invalid Email or Password"
+
       });
+
     }
 
-    // Generate Token
     const token = jwt.sign(
 
       {
+
         id: user._id
+
       },
 
       process.env.JWT_SECRET,
 
       {
+
         expiresIn: "7d"
+
       }
+
     );
 
     res.status(200).json({
 
       success: true,
 
-      message:
-        "Login Successful",
+      message: "Login Successful",
 
       token,
 
-      user,
+      user
+
     });
 
-  } catch (error) {
+  }
+
+  catch (error) {
 
     res.status(500).json({
 
       success: false,
 
-      message: error.message,
+      message: error.message
+
     });
 
   }
@@ -191,10 +212,9 @@ export const getUsers = async (req, res) => {
 
   try {
 
-    const users =
-      await userModel
-        .find()
-        .select("-password");
+    const users = await userModel
+      .find()
+      .select("-password");
 
     res.status(200).json({
 
@@ -202,16 +222,20 @@ export const getUsers = async (req, res) => {
 
       count: users.length,
 
-      users,
+      users
+
     });
 
-  } catch (error) {
+  }
+
+  catch (error) {
 
     res.status(500).json({
 
       success: false,
 
-      message: error.message,
+      message: error.message
+
     });
 
   }

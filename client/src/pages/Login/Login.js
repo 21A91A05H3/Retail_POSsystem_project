@@ -1,102 +1,130 @@
 import React, { useState } from "react";
 
+import axios from "axios";
+
 import "./Login.css";
 
 import {
-
   Link,
   useNavigate,
   Navigate
-
 } from "react-router-dom";
 
-import { toast }
-from "react-toastify";
+import { toast } from "react-toastify";
 
 function Login() {
 
-  const navigate =
-    useNavigate();
+  const navigate = useNavigate();
 
-  const [email, setEmail] =
-    useState("");
+  const [login, setLogin] = useState("");
 
-  const [password, setPassword] =
-    useState("");
+  const [password, setPassword] = useState("");
 
-  const [errors, setErrors] =
-    useState({});
+  const [errors, setErrors] = useState({});
 
- const isLoggedIn =
-  localStorage.getItem(
-    "adminLoggedIn"
-  );
+  const isLoggedIn =
+    localStorage.getItem("adminLoggedIn");
 
-if(isLoggedIn === "true"){
+  if (isLoggedIn === "true") {
 
-  return <Navigate to="/dashboard" />;
-}
+    return <Navigate to="/dashboard" />;
 
-  const handleLogin = (e) => {
+  }
+
+  const handleLogin = async (e) => {
 
     e.preventDefault();
 
     let validationErrors = {};
 
-    if(email === ""){
+    if (!login) {
 
-      validationErrors.email =
-        "Email is required";
+      validationErrors.login =
+        "Email or Phone Number is required";
+
     }
 
-    if(password === ""){
+    if (!password) {
 
       validationErrors.password =
         "Password is required";
-    }
-    else if(password.length < 6){
 
-      validationErrors.password =
-        "Password must be at least 6 characters";
     }
 
     setErrors(validationErrors);
 
-    if(
-      Object.keys(validationErrors).length === 0
-    ){
+    if (Object.keys(validationErrors).length > 0) {
 
-      const storedUser = JSON.parse(
+      return;
 
-        localStorage.getItem("user")
+    }
+
+    try {
+
+      const response = await axios.post(
+
+        "http://localhost:5000/api/auth/login",
+
+        {
+
+          login,
+
+          password
+
+        }
+
       );
 
-      if(
-
-        storedUser &&
-        storedUser.email === email &&
-        storedUser.password === password
-      ){
+      if (response.data.success) {
 
         localStorage.setItem(
 
           "adminLoggedIn",
+
           "true"
+
+        );
+
+        localStorage.setItem(
+
+          "adminToken",
+
+          response.data.token
+
+        );
+
+        localStorage.setItem(
+
+          "adminData",
+
+          JSON.stringify(response.data.user)
+
         );
 
         toast.success(
+
           "Login Successful"
+
         );
 
         navigate("/dashboard");
-      }
-      else{
 
-        toast.error(
-          "Invalid Email or Password"
-        );
       }
+
     }
+
+    catch (error) {
+
+      toast.error(
+
+        error.response?.data?.message ||
+
+        "Login Failed"
+
+      );
+
+    }
+
   };
 
   return (
@@ -107,7 +135,7 @@ if(isLoggedIn === "true"){
 
         <h2 className="text-center text-primary mb-4">
 
-          Retail POS Login
+          Retail POS Admin Login
 
         </h2>
 
@@ -116,34 +144,40 @@ if(isLoggedIn === "true"){
           <div className="mb-3">
 
             <label>
-              Email
+
+              Email or Phone Number
+
             </label>
 
             <input
-              type="email"
+
+              type="text"
 
               className="form-control"
 
-              placeholder="Enter email"
+              placeholder="Enter Email or Phone Number"
 
-              value={email}
+              value={login}
 
               onChange={(e) => {
 
-                setEmail(e.target.value);
+                setLogin(e.target.value);
 
                 setErrors({
 
                   ...errors,
 
-                  email: ""
+                  login: ""
+
                 });
+
               }}
+
             />
 
             <small className="text-danger">
 
-              {errors.email}
+              {errors.login}
 
             </small>
 
@@ -152,15 +186,18 @@ if(isLoggedIn === "true"){
           <div className="mb-3">
 
             <label>
+
               Password
+
             </label>
 
             <input
+
               type="password"
 
               className="form-control"
 
-              placeholder="Enter password"
+              placeholder="Enter Password"
 
               value={password}
 
@@ -173,8 +210,11 @@ if(isLoggedIn === "true"){
                   ...errors,
 
                   password: ""
+
                 });
+
               }}
+
             />
 
             <small className="text-danger">
@@ -198,8 +238,9 @@ if(isLoggedIn === "true"){
           Don't have an account?
 
           <Link to="/signup">
-            {" "}
-            Sign Up
+
+            {" "}Sign Up
+
           </Link>
 
         </p>
@@ -207,7 +248,9 @@ if(isLoggedIn === "true"){
       </div>
 
     </div>
+
   );
+
 }
 
 export default Login;

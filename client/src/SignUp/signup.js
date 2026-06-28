@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import axios from "axios";
+
 import "./signup.css";
 
 import {
@@ -8,40 +10,34 @@ import {
   useNavigate
 } from "react-router-dom";
 
-import { toast }
-from "react-toastify";
+import { toast } from "react-toastify";
 
 function Signup() {
 
-  const navigate =
-    useNavigate();
+  const navigate = useNavigate();
 
-  const [name, setName] =
-    useState("");
+  const [name, setName] = useState("");
 
-  const [email, setEmail] =
-    useState("");
+  const [email, setEmail] = useState("");
 
-  const [password, setPassword] =
-    useState("");
+  const [phone, setPhone] = useState("");
 
-  const [confirmPassword, setConfirmPassword] =
-    useState("");
+  const [password, setPassword] = useState("");
 
-  const [errors, setErrors] =
-    useState({});
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const [errors, setErrors] = useState({});
 
   const isLoggedIn =
-    localStorage.getItem(
-      "adminLoggedIn"
-    );
+    localStorage.getItem("adminLoggedIn");
 
   if (isLoggedIn === "true") {
 
     return <Navigate to="/dashboard" />;
+
   }
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
 
     e.preventDefault();
 
@@ -51,69 +47,140 @@ function Signup() {
 
       validationErrors.name =
         "Full name is required";
+
     }
 
     if (email === "") {
 
       validationErrors.email =
         "Email is required";
+
+    }
+
+    const emailPattern =
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (
+      email &&
+      !emailPattern.test(email)
+    ) {
+
+      validationErrors.email =
+        "Enter valid email";
+
+    }
+
+    if (phone === "") {
+
+      validationErrors.phone =
+        "Phone number is required";
+
+    }
+    else if (
+      !/^[6-9]\d{9}$/.test(phone)
+    ) {
+
+      validationErrors.phone =
+        "Enter valid 10-digit phone number";
+
     }
 
     if (password === "") {
 
       validationErrors.password =
         "Password is required";
+
     }
     else if (password.length < 6) {
 
       validationErrors.password =
         "Password must be at least 6 characters";
+
     }
 
     if (confirmPassword === "") {
 
       validationErrors.confirmPassword =
         "Confirm your password";
+
     }
     else if (password !== confirmPassword) {
 
       validationErrors.confirmPassword =
         "Passwords do not match";
+
     }
 
     setErrors(validationErrors);
 
     if (
-      Object.keys(validationErrors).length === 0
+      Object.keys(validationErrors).length > 0
     ) {
 
-      const userData = {
+      return;
 
-        name,
-        email,
-        password
-      };
-
-      localStorage.setItem(
-        "user",
-        JSON.stringify(userData)
-      );
-
-      toast.success(
-        "Signup Successful"
-      );
-
-      setName("");
-      setEmail("");
-      setPassword("");
-      setConfirmPassword("");
-
-      setTimeout(() => {
-
-        navigate("/");
-
-      }, 1500);
     }
+
+    try {
+
+      const response =
+        await axios.post(
+
+          "http://localhost:5000/api/auth/register",
+
+          {
+
+            name,
+
+            email,
+
+            phone,
+
+            password,
+
+            role: "admin"
+
+          }
+
+        );
+
+      if (response.data.success) {
+
+        toast.success(
+          "Signup Successful"
+        );
+
+        setName("");
+
+        setEmail("");
+
+        setPhone("");
+
+        setPassword("");
+
+        setConfirmPassword("");
+
+        setTimeout(() => {
+
+          navigate("/");
+
+        }, 1500);
+
+      }
+
+    }
+    catch (error) {
+
+      toast.error(
+
+        error.response?.data?.message ||
+
+        "Registration Failed"
+
+      );
+
+    }
+
   };
 
   return (
@@ -124,7 +191,7 @@ function Signup() {
 
         <h2 className="text-center text-primary mb-4">
 
-          Create Account
+          Create Admin Account
 
         </h2>
 
@@ -132,24 +199,14 @@ function Signup() {
 
           <div className="mb-3">
 
-            <label>
-              Full Name
-            </label>
+            <label>Full Name</label>
 
             <input
               type="text"
               className="form-control"
               placeholder="Enter full name"
               value={name}
-              onChange={(e) => {
-
-                setName(e.target.value);
-
-                setErrors({
-                  ...errors,
-                  name: ""
-                });
-              }}
+              onChange={(e)=>setName(e.target.value)}
             />
 
             <small className="text-danger">
@@ -162,24 +219,14 @@ function Signup() {
 
           <div className="mb-3">
 
-            <label>
-              Email
-            </label>
+            <label>Email</label>
 
             <input
               type="email"
               className="form-control"
               placeholder="Enter email"
               value={email}
-              onChange={(e) => {
-
-                setEmail(e.target.value);
-
-                setErrors({
-                  ...errors,
-                  email: ""
-                });
-              }}
+              onChange={(e)=>setEmail(e.target.value)}
             />
 
             <small className="text-danger">
@@ -192,24 +239,34 @@ function Signup() {
 
           <div className="mb-3">
 
-            <label>
-              Password
-            </label>
+            <label>Phone Number</label>
+
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Enter phone number"
+              value={phone}
+              onChange={(e)=>setPhone(e.target.value)}
+            />
+
+            <small className="text-danger">
+
+              {errors.phone}
+
+            </small>
+
+          </div>
+
+          <div className="mb-3">
+
+            <label>Password</label>
 
             <input
               type="password"
               className="form-control"
               placeholder="Enter password"
               value={password}
-              onChange={(e) => {
-
-                setPassword(e.target.value);
-
-                setErrors({
-                  ...errors,
-                  password: ""
-                });
-              }}
+              onChange={(e)=>setPassword(e.target.value)}
             />
 
             <small className="text-danger">
@@ -222,26 +279,14 @@ function Signup() {
 
           <div className="mb-3">
 
-            <label>
-              Confirm Password
-            </label>
+            <label>Confirm Password</label>
 
             <input
               type="password"
               className="form-control"
               placeholder="Confirm password"
               value={confirmPassword}
-              onChange={(e) => {
-
-                setConfirmPassword(
-                  e.target.value
-                );
-
-                setErrors({
-                  ...errors,
-                  confirmPassword: ""
-                });
-              }}
+              onChange={(e)=>setConfirmPassword(e.target.value)}
             />
 
             <small className="text-danger">
@@ -252,9 +297,7 @@ function Signup() {
 
           </div>
 
-          <button
-            className="btn btn-success w-100"
-          >
+          <button className="btn btn-success w-100">
 
             Sign Up
 
@@ -264,10 +307,7 @@ function Signup() {
 
             Already have an account?
 
-            <Link to="/">
-              {" "}
-              Login
-            </Link>
+            <Link to="/"> Login</Link>
 
           </p>
 
@@ -276,7 +316,9 @@ function Signup() {
       </div>
 
     </div>
+
   );
+
 }
 
 export default Signup;
