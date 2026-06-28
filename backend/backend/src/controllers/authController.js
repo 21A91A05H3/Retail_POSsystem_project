@@ -12,6 +12,7 @@ export const registerUser = async (req, res) => {
     const {
       name,
       email,
+      phone,
       password,
       role
     } = req.body;
@@ -19,7 +20,13 @@ export const registerUser = async (req, res) => {
     // Check Existing User
     const existingUser =
       await userModel.findOne({
-        email
+         $or:[
+
+        {email},
+
+        {phone}
+
+    ]
       });
 
     if (existingUser) {
@@ -46,6 +53,8 @@ export const registerUser = async (req, res) => {
         name,
 
         email,
+
+        phone,
 
         password: hashedPassword,
 
@@ -83,14 +92,28 @@ export const loginUser = async (req, res) => {
   try {
 
     const {
-      email,
+      login,
       password
     } = req.body;
 
     // Check User
     const user =
       await userModel.findOne({
-        email
+        $or:[
+
+{
+
+email:login
+
+},
+
+{
+
+phone:login
+
+}
+
+]
       });
 
     if (!user) {
