@@ -1,4 +1,4 @@
-import React, {
+import React,{
   useEffect,
   useState
 } from "react";
@@ -29,66 +29,77 @@ import {
 } from "recharts";
 
 import {
-  FaRupeeSign,
   FaShoppingCart,
   FaBoxOpen,
   FaUsers,
   FaWarehouse
 } from "react-icons/fa";
 
-function Dashboard() {
-    const [recentOrders, setRecentOrders] =
-  useState([]);
-  const [totalRevenue, setTotalRevenue] =
+function Dashboard(){
+
+  const [totalRevenue,setTotalRevenue]=
     useState(0);
 
-  const [totalOrders, setTotalOrders] =
+  const [totalOrders,setTotalOrders]=
     useState(0);
 
-  const [totalProducts, setTotalProducts] =
+  const [totalProducts,setTotalProducts]=
     useState(0);
 
-  const [lowStockProducts, setLowStockProducts] =
+  const [lowStockProducts,setLowStockProducts]=
     useState(0);
 
-  const [outOfStockProducts, setOutOfStockProducts] =
+  const [outOfStockProducts,setOutOfStockProducts]=
     useState(0);
 
-  const [totalCustomers, setTotalCustomers] =
+  const [totalCustomers,setTotalCustomers]=
     useState(0);
 
-  useEffect(() => {
+  const [recentOrders,setRecentOrders]=
+    useState([]);
+
+  const [lowStockList,setLowStockList]=
+    useState([]);
+
+  useEffect(()=>{
 
     fetchDashboardData();
 
-  }, []);
+  },[]);
 
-  const fetchDashboardData = async () => {
+  const fetchDashboardData=async()=>{
 
-    try {
+    try{
 
-      const analytics =
+      const analytics=
         await axios.get(
           "http://localhost:5000/api/orders/analytics"
         );
 
-      const products =
+      const products=
         await axios.get(
           "http://localhost:5000/api/products"
         );
 
-      const lowStock =
+      const lowStock=
         await axios.get(
           "http://localhost:5000/api/products/low-stock"
         );
 
-      const users =
+      const users=
         await axios.get(
           "http://localhost:5000/api/auth/users"
         );
 
+      const orders=
+        await axios.get(
+          "http://localhost:5000/api/orders"
+        );
+
       setTotalRevenue(
-        analytics.data.totalRevenue
+        Math.round(
+          analytics.data.totalRevenue
+        )
       );
 
       setTotalOrders(
@@ -107,13 +118,13 @@ function Dashboard() {
         users.data.users.length
       );
 
-      const outStock =
+      const outStock=
 
         products.data.products.filter(
 
-          (product)=>
+          (item)=>
 
-            product.stock===0
+            item.stock===0
 
         ).length;
 
@@ -121,14 +132,30 @@ function Dashboard() {
         outStock
       );
 
+      setRecentOrders(
+
+        orders.data.orders.slice(0,5)
+
+      );
+
+      setLowStockList(
+
+        products.data.products.filter(
+
+          (item)=>
+
+            item.stock<=5
+
+        )
+
+      );
+
     }
 
     catch(error){
 
-      console.log(
-        "Dashboard Error:",
-        error
-      );
+      console.log(error);
+
     }
 
   };
@@ -177,11 +204,11 @@ function Dashboard() {
 
       value:
 
-        totalProducts-
+      totalProducts-
 
-        lowStockProducts-
+      lowStockProducts-
 
-        outOfStockProducts
+      outOfStockProducts
 
     },
 
@@ -189,23 +216,23 @@ function Dashboard() {
 
       name:"Low Stock",
 
-      value:
-
-        lowStockProducts
-
-    },
-
-    {
-
-      name:"Out Of Stock",
-
-      value:
-
-        outOfStockProducts
+      value:lowStockProducts
 
     }
 
   ];
+
+  if(outOfStockProducts>0){
+
+    pieData.push({
+
+      name:"Out Of Stock",
+
+      value:outOfStockProducts
+
+    });
+
+  }
 
   const COLORS=[
 
@@ -216,7 +243,6 @@ function Dashboard() {
     "#ef4444"
 
   ];
-
   return (
 
     <div className="dashboard">
@@ -231,51 +257,37 @@ function Dashboard() {
 
           <h1>
 
-            📊 Dashboard Analytics
+            Dashboard
 
           </h1>
 
           <p>
 
-            Welcome to Retail POS & Inventory Management System
+            Retail POS & Inventory Management System
 
           </p>
 
         </div>
 
-        <div className="row g-4 justify-content-between">
+        <div className="row g-4">
 
-          <div className="col-lg-2 col-md-4 col-sm-6">
+          <div className="col-lg col-md-6">
 
             <div className="card stat-card revenue-card p-3 shadow">
 
-              <div className="d-flex justify-content-between align-items-center">
+              <h6>Total Revenue</h6>
 
-                <div>
+              <h2>
 
-                  <h6>
+                ₹{totalRevenue.toLocaleString()}
 
-                    Revenue
-
-                  </h6>
-
-                  <h2>
-
-                    ₹{Math.round(totalRevenue)}
-
-                  </h2>
-
-                </div>
-
-                <FaRupeeSign size={35} />
-
-              </div>
+              </h2>
 
             </div>
 
           </div>
 
-          <div className="col-lg-2 col-md-4 col-sm-6">
+          <div className="col-lg col-md-6">
 
             <div className="card stat-card orders-card p-3 shadow">
 
@@ -283,21 +295,13 @@ function Dashboard() {
 
                 <div>
 
-                  <h6>
+                  <h6>Total Orders</h6>
 
-                    Orders
-
-                  </h6>
-
-                  <h2>
-
-                    {totalOrders}
-
-                  </h2>
+                  <h2>{totalOrders}</h2>
 
                 </div>
 
-                <FaShoppingCart size={35} />
+                <FaShoppingCart size={34}/>
 
               </div>
 
@@ -305,7 +309,7 @@ function Dashboard() {
 
           </div>
 
-          <div className="col-lg-2 col-md-4 col-sm-6">
+          <div className="col-lg col-md-6">
 
             <div className="card stat-card products-card p-3 shadow">
 
@@ -313,21 +317,13 @@ function Dashboard() {
 
                 <div>
 
-                  <h6>
+                  <h6>Total Products</h6>
 
-                    Products
-
-                  </h6>
-
-                  <h2>
-
-                    {totalProducts}
-
-                  </h2>
+                  <h2>{totalProducts}</h2>
 
                 </div>
 
-                <FaBoxOpen size={35} />
+                <FaBoxOpen size={34}/>
 
               </div>
 
@@ -335,7 +331,7 @@ function Dashboard() {
 
           </div>
 
-          <div className="col-lg-2 col-md-4 col-sm-6">
+          <div className="col-lg col-md-6">
 
             <div className="card stat-card customers-card p-3 shadow">
 
@@ -343,21 +339,13 @@ function Dashboard() {
 
                 <div>
 
-                  <h6>
+                  <h6>Customers</h6>
 
-                    Customers
-
-                  </h6>
-
-                  <h2>
-
-                    {totalCustomers}
-
-                  </h2>
+                  <h2>{totalCustomers}</h2>
 
                 </div>
 
-                <FaUsers size={35} />
+                <FaUsers size={34}/>
 
               </div>
 
@@ -365,7 +353,7 @@ function Dashboard() {
 
           </div>
 
-          <div className="col-lg-2 col-md-4 col-sm-6">
+          <div className="col-lg col-md-6">
 
             <div className="card stat-card stock-card p-3 shadow">
 
@@ -373,21 +361,13 @@ function Dashboard() {
 
                 <div>
 
-                  <h6>
+                  <h6>Low Stock</h6>
 
-                    Low Stock
-
-                  </h6>
-
-                  <h2>
-
-                    {lowStockProducts}
-
-                  </h2>
+                  <h2>{lowStockProducts}</h2>
 
                 </div>
 
-                <FaWarehouse size={35} />
+                <FaWarehouse size={34}/>
 
               </div>
 
@@ -429,25 +409,27 @@ function Dashboard() {
 
                   />
 
-                  <XAxis
+                  <XAxis dataKey="name"/>
 
-                    dataKey="name"
+                  <YAxis/>
 
-                  />
-
-                  <YAxis />
-
-                  <Tooltip />
+                  <Tooltip/>
 
                   <Bar
 
                     dataKey="value"
 
-                    fill="#2563eb"
-
                     radius={[8,8,0,0]}
 
                   >
+
+                    <Cell fill="#2563eb"/>
+
+                    <Cell fill="#16a34a"/>
+
+                    <Cell fill="#9333ea"/>
+
+                    <Cell fill="#f59e0b"/>
 
                     <LabelList
 
@@ -521,13 +503,157 @@ function Dashboard() {
 
                   </Pie>
 
-                  <Legend />
+                  <Legend/>
 
-                  <Tooltip />
+                  <Tooltip/>
 
                 </PieChart>
 
               </ResponsiveContainer>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div className="row mt-5">
+
+          <div className="col-lg-7">
+
+            <div className="card shadow p-4">
+
+              <h4 className="mb-4">
+
+                🧾 Recent Orders
+
+              </h4>
+
+              <table className="table table-hover">
+
+                <thead>
+
+                  <tr>
+
+                    <th>Customer</th>
+
+                    <th>Total</th>
+
+                    <th>Status</th>
+
+                  </tr>
+
+                </thead>
+
+                <tbody>
+
+                  {
+
+                    recentOrders.map((order)=>(
+
+                      <tr
+
+                        key={order._id}
+
+                      >
+
+                        <td>
+
+                          {order.customerName}
+
+                        </td>
+
+                        <td>
+
+                          ₹{Math.round(order.totalAmount)}
+
+                        </td>
+
+                        <td>
+
+                          <span className="badge bg-success">
+
+                            Completed
+
+                          </span>
+
+                        </td>
+
+                      </tr>
+
+                    ))
+
+                  }
+
+                </tbody>
+
+              </table>
+
+            </div>
+
+          </div>
+
+          <div className="col-lg-5">
+
+            <div className="card shadow p-4">
+
+              <h4 className="mb-4">
+
+                ⚠ Low Stock Products
+
+              </h4>
+
+              <table className="table">
+
+                <thead>
+
+                  <tr>
+
+                    <th>Product</th>
+
+                    <th>Stock</th>
+
+                  </tr>
+
+                </thead>
+
+                <tbody>
+
+                  {
+
+                    lowStockList.map((item)=>(
+
+                      <tr
+
+                        key={item._id}
+
+                      >
+
+                        <td>
+
+                          {item.name}
+
+                        </td>
+
+                        <td>
+
+                          <span className="badge bg-warning text-dark">
+
+                            {item.stock}
+
+                          </span>
+
+                        </td>
+
+                      </tr>
+
+                    ))
+
+                  }
+
+                </tbody>
+
+              </table>
 
             </div>
 
