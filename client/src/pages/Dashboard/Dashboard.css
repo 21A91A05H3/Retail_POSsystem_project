@@ -13,3 +13,80 @@
 
     color: gray;
 }
+
+
+.card{
+
+    border-radius:15px;
+
+    transition:.3s;
+
+    border:none;
+}
+
+.card:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:0 8px 20px rgba(0,0,0,.12);
+}
+
+.recharts-wrapper{
+
+    margin:auto;
+}
+
+.dashboard-header{
+
+    margin-bottom:30px;
+}
+
+.footer{
+
+    text-align:center;
+
+    margin-top:40px;
+
+    color:#666;
+}
+
+.stat-card{
+
+    color:white;
+
+    border:none;
+
+    border-radius:15px;
+
+    transition:.3s;
+}
+
+.stat-card:hover{
+
+    transform:translateY(-5px);
+}
+
+.revenue-card{
+
+    background:linear-gradient(135deg,#16a34a,#22c55e);
+}
+
+.orders-card{
+
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+}
+
+.products-card{
+
+    background:linear-gradient(135deg,#ea580c,#fb923c);
+}
+
+.customers-card{
+
+    background:linear-gradient(135deg,#9333ea,#a855f7);
+}
+
+.stock-card{
+
+    background:linear-gradient(135deg,#dc2626,#ef4444);
+}
