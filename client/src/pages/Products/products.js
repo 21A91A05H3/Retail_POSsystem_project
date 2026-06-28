@@ -1,214 +1,146 @@
-import React, {
-  useState,
-  useEffect
-} from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./products.css";
 
-import Sidebar
-from "../../components/Sidebar/sidebar";
-
-import Navbar
-from "../../components/Navbar/navbar";
+import Sidebar from "../../components/Sidebar/sidebar";
+import Navbar from "../../components/Navbar/navbar";
 
 function Products() {
 
-  const [productName, setProductName] =
-    useState("");
+  const [productName, setProductName] = useState("");
+  const [price, setPrice] = useState("");
 
-  const [price, setPrice] =
-    useState("");
+  const [products, setProducts] = useState([]);
 
-  const [products, setProducts] =
-  useState([]);
+  const [search, setSearch] = useState("");
 
-  const [search, setSearch] =
-    useState("");
+  const [editId, setEditId] = useState(null);
+  const [editName, setEditName] = useState("");
+  const [editPrice, setEditPrice] = useState("");
 
-  const [editId, setEditId] =
-    useState(null);
-
-  const [editName, setEditName] =
-    useState("");
-
-  const [editPrice, setEditPrice] =
-    useState("");
-
- useEffect(() => {
-
-  fetchProducts();
-
-}, []);
-
-const fetchProducts = async () => {
-
-  try {
-
-    const response =
-
-      await axios.get(
-        "http://localhost:5000/api/products"
-      );
-
-    setProducts(
-      response.data.products
-    );
-
-  } catch(error){
-
-    console.log(error);
-  }
-};
-
-const addProduct = async (e) => {
-
-  e.preventDefault();
-
-  if(
-    productName === "" ||
-    price === ""
-  ){
-    return;
-  }
-
-  try {
-
-    await axios.post(
-
-      "http://localhost:5000/api/products",
-
-      {
-        name: productName,
-        price: Number(price)
-      }
-    );
+  useEffect(() => {
 
     fetchProducts();
 
-    setProductName("");
+  }, []);
 
-    setPrice("");
+  const fetchProducts = async () => {
 
-  } catch(error){
+    try {
 
-    console.log(error);
-  }
-};
-  const deleteProduct = (id) => {
-
-    const updatedProducts =
-
-      products.filter(
-
-        (product) =>
-
-          product.id !== id
+      const response = await axios.get(
+        "http://localhost:5000/api/products"
       );
 
-    setProducts(updatedProducts);
+      setProducts(response.data.products);
 
-    /* Delete From Inventory */
+    } catch (error) {
 
-    const inventory =
+      console.log(error);
 
-      JSON.parse(
-        localStorage.getItem("inventory")
-      ) || [];
+    }
 
-    const updatedInventory =
+  };
 
-      inventory.filter(
+  const addProduct = async (e) => {
 
-        (item) =>
-          item.id !== id
+    e.preventDefault();
+
+    if (productName === "" || price === "") {
+
+      return;
+
+    }
+
+    try {
+
+      await axios.post(
+        "http://localhost:5000/api/products",
+        {
+          name: productName,
+          price: Number(price)
+        }
       );
 
-    localStorage.setItem(
+      fetchProducts();
 
-      "inventory",
+      setProductName("");
+      setPrice("");
 
-      JSON.stringify(updatedInventory)
-    );
+    } catch (error) {
+
+      console.log(error);
+
+    }
+
+  };
+
+  const deleteProduct = async (id) => {
+
+    try {
+
+      await axios.delete(
+        `http://localhost:5000/api/products/${id}`
+      );
+
+      fetchProducts();
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
+
   };
 
   const editProduct = (product) => {
 
-    setEditId(product.id);
+    setEditId(product._id);
 
     setEditName(product.name);
 
     setEditPrice(product.price);
+
   };
 
-  const updateProduct = () => {
+  const updateProduct = async () => {
 
-    const updatedProducts =
+    try {
 
-      products.map((product) =>
+      await axios.put(
 
-        product.id === editId
-        ?
+        `http://localhost:5000/api/products/${editId}`,
+
         {
-          ...product,
-
           name: editName,
-
-          price: editPrice
+          price: Number(editPrice)
         }
-        :
-        product
+
       );
 
-    setProducts(updatedProducts);
+      fetchProducts();
 
-    /* Update Inventory Product Name */
+      setEditId(null);
 
-    const inventory =
+      setEditName("");
 
-      JSON.parse(
-        localStorage.getItem("inventory")
-      ) || [];
+      setEditPrice("");
 
-    const updatedInventory =
+    } catch (error) {
 
-      inventory.map((item) =>
+      console.log(error);
 
-        item.id === editId
-        ?
-        {
-          ...item,
+    }
 
-          product: editName
-        }
-        :
-        item
-      );
-
-    localStorage.setItem(
-
-      "inventory",
-
-      JSON.stringify(updatedInventory)
-    );
-
-    setEditId(null);
-
-    setEditName("");
-
-    setEditPrice("");
   };
 
-  const filteredProducts =
+  const filteredProducts = products.filter((product) =>
 
-    products.filter((product) =>
-
-      product.name
+    product.name
       .toLowerCase()
-      .includes(
+      .includes(search.toLowerCase())
 
-        search.toLowerCase()
-      )
-    );
+  );
 
   return (
 
@@ -226,47 +158,34 @@ const addProduct = async (e) => {
 
         </h2>
 
-        {/* Product Form */}
-
         <form
           className="product-form"
-
           onSubmit={addProduct}
         >
 
           <input
             type="text"
-
             placeholder="Product Name"
-
             className="form-control"
-
             value={productName}
-
             onChange={(e) =>
-              setProductName(
-                e.target.value
-              )
+              setProductName(e.target.value)
             }
           />
 
           <input
             type="number"
-
             placeholder="Price"
-
             className="form-control"
-
             value={price}
-
             onChange={(e) =>
-              setPrice(
-                e.target.value
-              )
+              setPrice(e.target.value)
             }
           />
 
-          <button className="btn btn-primary">
+          <button
+            className="btn btn-primary"
+          >
 
             Add Product
 
@@ -274,25 +193,15 @@ const addProduct = async (e) => {
 
         </form>
 
-        {/* Search */}
-
         <input
           type="text"
-
           placeholder="Search Product"
-
           className="form-control search-input"
-
           value={search}
-
           onChange={(e) =>
-            setSearch(
-              e.target.value
-            )
+            setSearch(e.target.value)
           }
         />
-
-        {/* Product Table */}
 
         <div className="table-container">
 
@@ -317,125 +226,131 @@ const addProduct = async (e) => {
             <tbody>
 
               {
-                filteredProducts.length === 0
-                ?
 
-                <tr>
+                filteredProducts.length === 0 ?
 
-                  <td
-                    colSpan="4"
+                  <tr>
 
-                    className="text-center text-muted"
-                  >
+                    <td
+                      colSpan="4"
+                      className="text-center"
+                    >
 
-                    No Products Available
-
-                  </td>
-
-                </tr>
-
-                :
-
-                filteredProducts.map((product) => (
-
-                  <tr key={product._id}>
-
-                    <td>
-                      {product._id}
-                    </td>
-
-                    <td>
-
-                      {
-                        editId === product.id
-                        ?
-                        <input
-                          type="text"
-
-                          className="form-control"
-
-                          value={editName}
-
-                          onChange={(e) =>
-                            setEditName(
-                              e.target.value
-                            )
-                          }
-                        />
-                        :
-                        product.name
-                      }
-
-                    </td>
-
-                    <td>
-
-                      {
-                        editId === product._id
-                        ?
-                        <input
-                          type="number"
-
-                          className="form-control"
-
-                          value={editPrice}
-
-                          onChange={(e) =>
-                            setEditPrice(
-                              e.target.value
-                            )
-                          }
-                        />
-                        :
-                        `₹${product.price}`
-                      }
-
-                    </td>
-
-                    <td>
-
-                      {
-                        editId === product.id
-                        ?
-                        <button
-                          className="btn btn-success btn-sm me-2"
-
-                          onClick={updateProduct}
-                        >
-
-                          Save
-
-                        </button>
-                        :
-                        <button
-                          className="btn btn-warning btn-sm me-2"
-
-                          onClick={() =>
-                            editProduct(product)
-                          }
-                        >
-
-                          Edit
-
-                        </button>
-                      }
-
-                      <button
-                        className="btn btn-danger btn-sm"
-
-                        onClick={() =>
-                          deleteProduct(product.id)
-                        }
-                      >
-
-                        Delete
-
-                      </button>
+                      No Products Available
 
                     </td>
 
                   </tr>
-                ))
+
+                  :
+
+                  filteredProducts.map((product) => (
+
+                    <tr key={product._id}>
+
+                      <td>
+
+                        {product._id}
+
+                      </td>
+
+                      <td>
+
+                        {
+
+                          editId === product._id ?
+
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={editName}
+                              onChange={(e) =>
+                                setEditName(
+                                  e.target.value
+                                )
+                              }
+                            />
+
+                            :
+
+                            product.name
+
+                        }
+
+                      </td>
+
+                      <td>
+
+                        {
+
+                          editId === product._id ?
+
+                            <input
+                              type="number"
+                              className="form-control"
+                              value={editPrice}
+                              onChange={(e) =>
+                                setEditPrice(
+                                  e.target.value
+                                )
+                              }
+                            />
+
+                            :
+
+                            `₹${product.price}`
+
+                        }
+
+                      </td>
+
+                      <td>
+
+                        {
+
+                          editId === product._id ?
+
+                            <button
+                              className="btn btn-success btn-sm me-2"
+                              onClick={updateProduct}
+                            >
+
+                              Save
+
+                            </button>
+
+                            :
+
+                            <button
+                              className="btn btn-warning btn-sm me-2"
+                              onClick={() =>
+                                editProduct(product)
+                              }
+                            >
+
+                              Edit
+
+                            </button>
+
+                        }
+
+                        <button
+                          className="btn btn-danger btn-sm"
+                          onClick={() =>
+                            deleteProduct(product._id)
+                          }
+                        >
+
+                          Delete
+
+                        </button>
+
+                      </td>
+
+                    </tr>
+
+                  ))
+
               }
 
             </tbody>
@@ -447,7 +362,9 @@ const addProduct = async (e) => {
       </div>
 
     </div>
+
   );
+
 }
 
 export default Products;
